@@ -1,5 +1,7 @@
 package tw.teddysoft.tasks;
 
+import tw.teddysoft.tasks.entity.Task;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
