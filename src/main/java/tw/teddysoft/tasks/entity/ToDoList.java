@@ -4,34 +4,62 @@ import tw.teddysoft.ezddd.core.entity.AggregateRoot;
 import tw.teddysoft.ezddd.core.entity.DomainEvent;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ToDoList extends AggregateRoot<ToDoListId, DomainEvent> {
 
     private final ToDoListId id;
     private final List<Project> projects;
+    private long lastTaskId;
 
     public ToDoList(ToDoListId id) {
         this.id = id;
         this.projects = new ArrayList<>();
+        this.lastTaskId = 0;
     }
     public List<Project> getProjects() {
-        return projects;
+        return projects.stream().map(project -> (Project) new ReadOnlyProject(project)).toList();
     }
 
-    public void addProject(ProjectName name, ArrayList<Task> tasks) {
-        this.projects.add(new Project(name, tasks));
+    public void addProject(ProjectName name) {
+        if (projects.stream().anyMatch(project -> project.getName().equals(name))) return;
+        this.projects.add(new Project(name));
     }
 
     public List<Task> getTasks(ProjectName projectName) {
-        return projects.stream().filter(x -> x.getName().equals(projectName))
+        return projects.stream()
+                .filter(x -> x.getName().equals(projectName))
                 .findFirst()
-                .map(Project::getTasks)
+                .map(project -> project.getTasks().stream()
+                        .map(t -> (Task) new ReadOnlyTask(t))
+                        .toList())
                 .orElse(null);
     }
+
+    public void addTask(ProjectName name, String description, boolean done) {
+        Optional<Project> project = getProject(name);
+        project.ifPresent(p -> p.addTask(new Task(TaskId.of(nextTaskId()), description, done)));
+    }
+
+    public Optional<Project> getProject(ProjectName projectName) {
+        return projects.stream().filter(p -> p.getName().equals(projectName)).findFirst();
+    }
+
 
     @Override
     public ToDoListId getId() {
         return id;
+    }
+
+    public void setDone(TaskId taskId, boolean done) {
+        projects.stream()
+                .filter(p -> p.containTask(taskId))
+                .findFirst()
+                .ifPresent(p -> p.setTaskDone(taskId, done));
+    }
+
+    private long nextTaskId() {
+        return ++lastTaskId;
     }
 }
 

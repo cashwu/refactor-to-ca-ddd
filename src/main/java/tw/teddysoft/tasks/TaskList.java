@@ -98,7 +98,7 @@ public final class TaskList implements Runnable {
     }
 
     private void addProject(ProjectName projectName) {
-        toDoList.addProject(projectName, new ArrayList<Task>());
+        toDoList.addProject(projectName);
     }
 
     private void addTask(ProjectName projectName, String description) {
@@ -108,7 +108,7 @@ public final class TaskList implements Runnable {
             out.println();
             return;
         }
-        projectTasks.add(new Task(TaskId.of(nextId()), description, false));
+        toDoList.addTask(projectName, description, false);
     }
 
     private void check(String idString) {
@@ -124,7 +124,7 @@ public final class TaskList implements Runnable {
         for (Project project : toDoList.getProjects()) {
             for (Task task : project.getTasks()) {
                 if (task.getId().equals(id)) {
-                    task.setDone(done);
+                    toDoList.setDone(task.getId(), done);
                     return;
                 }
             }
