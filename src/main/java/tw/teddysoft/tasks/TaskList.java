@@ -3,7 +3,7 @@ package tw.teddysoft.tasks;
 import tw.teddysoft.tasks.entity.Project;
 import tw.teddysoft.tasks.entity.ProjectName;
 import tw.teddysoft.tasks.entity.Task;
-import tw.teddysoft.tasks.entity.Tasks;
+import tw.teddysoft.tasks.entity.ToDoList;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public final class TaskList implements Runnable {
     private static final String QUIT = "quit";
-    private final Tasks tasks = new Tasks();
+    private final ToDoList toDoList = new ToDoList();
     private final BufferedReader in;
     private final PrintWriter out;
 
@@ -74,7 +74,7 @@ public final class TaskList implements Runnable {
     }
 
     private void show() {
-        for (Project project : tasks.entrySet()) {
+        for (Project project : toDoList.getProjects()) {
             out.println(project.getName());
             for (Task task : project.getTasks()) {
                 out.printf("    [%c] %d: %s%n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription());
@@ -95,11 +95,11 @@ public final class TaskList implements Runnable {
     }
 
     private void addProject(ProjectName projectName) {
-        tasks.put(projectName, new ArrayList<Task>());
+        toDoList.addProject(projectName, new ArrayList<Task>());
     }
 
     private void addTask(ProjectName projectName, String description) {
-        List<Task> projectTasks = tasks.get(projectName);
+        List<Task> projectTasks = toDoList.getTasks(projectName);
         if (projectTasks == null) {
             out.printf("Could not find a project with the name \"%s\".", projectName);
             out.println();
@@ -118,7 +118,7 @@ public final class TaskList implements Runnable {
 
     private void setDone(String idString, boolean done) {
         int id = Integer.parseInt(idString);
-        for (Project project : tasks.entrySet()) {
+        for (Project project : toDoList.getProjects()) {
             for (Task task : project.getTasks()) {
                 if (task.getId() == id) {
                     task.setDone(done);

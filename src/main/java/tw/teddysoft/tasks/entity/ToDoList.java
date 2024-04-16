@@ -2,21 +2,21 @@ package tw.teddysoft.tasks.entity;
 
 import java.util.*;
 
-public class Tasks {
+public class ToDoList {
     private final List<Project> projects;
 
-    public Tasks() {
+    public ToDoList() {
         this.projects = new ArrayList<>();
     }
-    public List<Project>  entrySet() {
+    public List<Project> getProjects() {
         return projects;
     }
 
-    public void put(ProjectName name, ArrayList<Task> tasks) {
+    public void addProject(ProjectName name, ArrayList<Task> tasks) {
         this.projects.add(new Project(name, tasks));
     }
 
-    public List<Task> get(ProjectName projectName) {
+    public List<Task> getTasks(ProjectName projectName) {
         return projects.stream().filter(x -> x.getName().equals(projectName))
                 .findFirst()
                 .map(Project::getTasks)
