@@ -1,0 +1,12 @@
+package tw.teddysoft.tasks.entity;
+
+public record ProjectName(String value) {
+    public static ProjectName of(String name) {
+        return new ProjectName(name);
+    }
+
+    @Override
+    public String toString(){
+        return value;
+    }
+}
