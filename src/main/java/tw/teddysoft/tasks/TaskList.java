@@ -1,5 +1,6 @@
 package tw.teddysoft.tasks;
 
+import tw.teddysoft.tasks.entity.Project;
 import tw.teddysoft.tasks.entity.ProjectName;
 import tw.teddysoft.tasks.entity.Task;
 import tw.teddysoft.tasks.entity.Tasks;
@@ -10,7 +11,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public final class TaskList implements Runnable {
     private static final String QUIT = "quit";
@@ -74,9 +74,9 @@ public final class TaskList implements Runnable {
     }
 
     private void show() {
-        for (Map.Entry<ProjectName, List<Task>> project : tasks.entrySet()) {
-            out.println(project.getKey());
-            for (Task task : project.getValue()) {
+        for (Project project : tasks.entrySet()) {
+            out.println(project.getName());
+            for (Task task : project.getTasks()) {
                 out.printf("    [%c] %d: %s%n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription());
             }
             out.println();
@@ -118,8 +118,8 @@ public final class TaskList implements Runnable {
 
     private void setDone(String idString, boolean done) {
         int id = Integer.parseInt(idString);
-        for (Map.Entry<ProjectName, List<Task>> project : tasks.entrySet()) {
-            for (Task task : project.getValue()) {
+        for (Project project : tasks.entrySet()) {
+            for (Task task : project.getTasks()) {
                 if (task.getId() == id) {
                     task.setDone(done);
                     return;
