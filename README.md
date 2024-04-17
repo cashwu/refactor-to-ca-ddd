@@ -13,3 +13,6 @@ Create Clean architecture four layers and enrich classes in the entity package
 
 ## Step 3
 Find more classes in the entity package
+
+## Step 4
+Form Commands and Queries in the usecase package
