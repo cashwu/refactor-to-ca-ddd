@@ -4,7 +4,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+import tw.teddysoft.tasks.adapter.presenter.HelpConsolePresenter;
+import tw.teddysoft.tasks.adapter.presenter.ShowConsolePresenter;
+import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepository;
+import tw.teddysoft.tasks.entity.ToDoList;
+import tw.teddysoft.tasks.entity.ToDoListId;
 import tw.teddysoft.tasks.io.ToDoListApp;
+import tw.teddysoft.tasks.usecase.service.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,7 +36,26 @@ public final class ApplicationTest {
     public ApplicationTest() throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(new PipedInputStream(inStream)));
         PrintWriter out = new PrintWriter(new PipedOutputStream(outStream), true);
-        ToDoListApp toDoListApp = new ToDoListApp(in, out);
+        var repository = new ToDoListInMemoryRepository();
+        repository.save(new ToDoList(ToDoListId.of(ToDoListApp.DEFAULT_TO_DO_LIST_ID)));
+        var showUseCase = new ShowService(repository);
+        var showPresenter = new ShowConsolePresenter(out);
+        var addProjectUseCase = new AddProjectService(repository);
+        var addTaskUseCase = new AddTaskService(repository);
+        var setDoneUseCase = new SetDoneService(repository);
+        var helpUseCase = new HelpService(new HelpConsolePresenter(out));
+        var errorUseCase = new ErrorService();
+
+        ToDoListApp toDoListApp = new ToDoListApp(
+                in,
+                out,
+                showUseCase,
+                showPresenter,
+                addProjectUseCase,
+                addTaskUseCase,
+                setDoneUseCase,
+                helpUseCase,
+                errorUseCase);
         applicationThread = new Thread(toDoListApp);
     }
 
