@@ -15,6 +15,7 @@ import tw.teddysoft.tasks.entity.ToDoList;
 import tw.teddysoft.tasks.entity.ToDoListId;
 import tw.teddysoft.tasks.io.springboot.config.UseCaseInjection;
 import tw.teddysoft.tasks.usecase.port.in.task.deadline.DeadlineUseCase;
+import tw.teddysoft.tasks.usecase.port.in.task.today.TodayUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowUseCase;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
@@ -49,6 +50,7 @@ public class ToDoListSpringBootApp extends SpringBootServletInitializer implemen
     private final ErrorUseCase errorUseCase;
     private final HelpUseCase helpUseCase;
     private final DeadlineUseCase deadlineUseCase;
+    private final TodayUseCase todayUseCase;
 
     @Autowired
     public ToDoListSpringBootApp(
@@ -62,7 +64,8 @@ public class ToDoListSpringBootApp extends SpringBootServletInitializer implemen
             SetDoneUseCase setDoneUseCase,
             @Qualifier("consoleHelp") HelpUseCase helpUseCase,
             ErrorUseCase errorUseCase,
-            DeadlineUseCase deadlineUseCase){
+            DeadlineUseCase deadlineUseCase,
+            TodayUseCase todayUseCase){
 
         this.in = in;
         this.out =  out;
@@ -74,6 +77,7 @@ public class ToDoListSpringBootApp extends SpringBootServletInitializer implemen
         this.helpUseCase = helpUseCase;
         this.errorUseCase = errorUseCase;
         this.deadlineUseCase = deadlineUseCase;
+        this.todayUseCase = todayUseCase;
 
         if (repository.findById(ToDoListId.of(TO_DO_LIST_ID)).isEmpty())
             repository.save(new ToDoList(ToDoListId.of(TO_DO_LIST_ID)));
@@ -112,7 +116,8 @@ public class ToDoListSpringBootApp extends SpringBootServletInitializer implemen
                     setDoneUseCase,
                     helpUseCase,
                     errorUseCase,
-                    deadlineUseCase).execute(command);
+                    deadlineUseCase,
+                    todayUseCase).execute(command);
         }
     }
 }

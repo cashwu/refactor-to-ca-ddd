@@ -21,6 +21,7 @@ import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowUseCase;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
 import tw.teddysoft.tasks.usecase.service.HelpService;
 import tw.teddysoft.tasks.usecase.port.in.project.add.AddProjectUseCase;
+import tw.teddysoft.tasks.usecase.port.in.task.today.TodayUseCase;
 
 import java.io.*;
 
@@ -43,6 +44,7 @@ public class SpringBootApplicationTest extends SpringBootTestContextProvider {
     private final SetDoneUseCase setDoneUseCase;
     private final ErrorUseCase errorUseCase;
     private final DeadlineUseCase deadlineUseCase;
+    private final TodayUseCase todayUseCase;
 
     @Autowired
     public SpringBootApplicationTest(
@@ -53,7 +55,8 @@ public class SpringBootApplicationTest extends SpringBootTestContextProvider {
             SetDoneUseCase setDoneUseCase,
             @Qualifier("consoleHelp") HelpUseCase helpUseCase,
             ErrorUseCase errorUseCase,
-            DeadlineUseCase deadlineUseCase){
+            DeadlineUseCase deadlineUseCase,
+            TodayUseCase todayUseCase){
 
         this.showUseCase = showUseCase;
         this.addProjectUseCase = addProjectUseCase;
@@ -61,6 +64,7 @@ public class SpringBootApplicationTest extends SpringBootTestContextProvider {
         this.setDoneUseCase = setDoneUseCase;
         this.errorUseCase = errorUseCase;
         this.deadlineUseCase = deadlineUseCase;
+        this.todayUseCase = todayUseCase;
         repository.save(new ToDoList(ToDoListId.of(ToDoListApp.DEFAULT_TO_DO_LIST_ID)));
     }
 
@@ -73,7 +77,7 @@ public class SpringBootApplicationTest extends SpringBootTestContextProvider {
         var helpUseCase = new HelpService(new HelpConsolePresenter(out));
         var showPresenter = new ShowConsolePresenter(out);
 
-        ToDoListApp toDoListApp = new ToDoListApp(in, out, showUseCase, showPresenter, addProjectUseCase, addTaskUseCase, setDoneUseCase, helpUseCase, errorUseCase, deadlineUseCase);
+        ToDoListApp toDoListApp = new ToDoListApp(in, out, showUseCase, showPresenter, addProjectUseCase, addTaskUseCase, setDoneUseCase, helpUseCase, errorUseCase, deadlineUseCase, todayUseCase);
         applicationThread = new Thread(toDoListApp);
         applicationThread.start();
     }

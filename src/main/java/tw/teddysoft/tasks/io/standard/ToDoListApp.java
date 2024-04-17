@@ -9,6 +9,7 @@ import tw.teddysoft.tasks.adapter.controller.console.ToDoListConsoleController;
 import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.deadline.DeadlineUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneUseCase;
+import tw.teddysoft.tasks.usecase.port.in.task.today.TodayUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowUseCase;
@@ -34,6 +35,7 @@ public final class ToDoListApp implements Runnable {
     private final HelpUseCase helpUseCase;
     private final ErrorUseCase errorUseCase;
     private final DeadlineUseCase deadlineUseCase;
+    private final TodayUseCase todayUseCase;
 
     public static void main(String[] args) {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -48,6 +50,7 @@ public final class ToDoListApp implements Runnable {
         var helpUseCase = new HelpService(new HelpConsolePresenter(out));
         var errorUseCase = new ErrorService();
         var deadlineUseCase = new DeadlineService(repository);
+        var todayUseCase = new TodayService(repository);
 
         new ToDoListApp(
                 in,
@@ -59,7 +62,8 @@ public final class ToDoListApp implements Runnable {
                 setDoneUseCase,
                 helpUseCase,
                 errorUseCase,
-                deadlineUseCase
+                deadlineUseCase,
+                todayUseCase
         ).run();
     }
 
@@ -73,7 +77,8 @@ public final class ToDoListApp implements Runnable {
             SetDoneUseCase setDoneUseCase,
             HelpUseCase helpUseCase,
             ErrorUseCase errorUseCase,
-            DeadlineUseCase deadlineUseCase) {
+            DeadlineUseCase deadlineUseCase,
+            TodayUseCase todayUseCase) {
 
         this.in = reader;
         this.out = writer;
@@ -85,6 +90,7 @@ public final class ToDoListApp implements Runnable {
         this.helpUseCase = helpUseCase;
         this.errorUseCase = errorUseCase;
         this.deadlineUseCase = deadlineUseCase;
+        this.todayUseCase = todayUseCase;
 
     }
 
@@ -110,7 +116,8 @@ public final class ToDoListApp implements Runnable {
                     setDoneUseCase,
                     helpUseCase,
                     errorUseCase,
-                    deadlineUseCase).execute(command);
+                    deadlineUseCase,
+                    todayUseCase).execute(command);
         }
     }
 }

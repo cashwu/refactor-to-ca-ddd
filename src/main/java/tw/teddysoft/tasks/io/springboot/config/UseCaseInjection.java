@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import tw.teddysoft.tasks.adapter.controller.web.HelpWebPresenter;
 import tw.teddysoft.tasks.adapter.presenter.ShowConsolePresenter;
 import tw.teddysoft.tasks.usecase.port.in.task.deadline.DeadlineUseCase;
+import tw.teddysoft.tasks.usecase.port.in.task.today.TodayUseCase;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
 import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowUseCase;
@@ -80,6 +81,11 @@ public class UseCaseInjection {
     @Bean
     public DeadlineUseCase deadlineUseCase() {
         return new DeadlineService(toDoListRepository);
+    }
+
+    @Bean
+    public TodayUseCase todayUseCase() {
+        return new TodayService(toDoListRepository);
     }
 
 }
