@@ -25,3 +25,21 @@ Form Main Component
 
 ## Step 7 
 Create Web Controllers
+
+Add Project
+curl --data "todolistId=001&projectName=p1"  http://localhost:8080/projects
+
+Add Task
+curl --data "todolistId=001&projectName=p1&taskDescription=t1"  http://localhost:8080/tasks
+
+Check
+curl --data "todolistId=001&taskId=1&done=true"  http://localhost:8080/setdone
+
+Uncheck
+curl --data "todolistId=001&taskId=1&done=false"  http://localhost:8080/setdone
+
+Help
+curl http://localhost:8080/help
+
+Show
+curl http://localhost:8080/show

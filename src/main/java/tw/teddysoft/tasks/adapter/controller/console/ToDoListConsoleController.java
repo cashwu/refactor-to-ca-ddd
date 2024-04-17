@@ -1,4 +1,4 @@
-package tw.teddysoft.tasks.adapter.controller;
+package tw.teddysoft.tasks.adapter.controller.console;
 
 import tw.teddysoft.ezddd.core.usecase.Input;
 import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorInput;
