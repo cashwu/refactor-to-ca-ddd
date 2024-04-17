@@ -2,8 +2,6 @@ package tw.teddysoft.tasks.adapter.controller;
 
 import tw.teddysoft.ezddd.core.usecase.Input;
 import tw.teddysoft.tasks.adapter.presenter.HelpConsolePresenter;
-import tw.teddysoft.tasks.adapter.presenter.ShowConsolePresenter;
-import tw.teddysoft.tasks.entity.ToDoList;
 import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorInput;
 import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
@@ -30,17 +28,20 @@ public class ToDoListConsoleController {
 
     private final ShowUseCase showUseCase;
     private final ShowPresenter showPresenter;
+    private AddProjectUseCase addProjectUseCase;
 
     public ToDoListConsoleController(
             PrintWriter out,
             ToDoListRepository repository,
             ShowUseCase showUseCase,
-            ShowPresenter showPresenter) {
+            ShowPresenter showPresenter,
+            AddProjectUseCase addProjectUseCase) {
 
         this.out = out;
         this.repository = repository;
         this.showUseCase = showUseCase;
         this.showPresenter = showPresenter;
+        this.addProjectUseCase = addProjectUseCase;
     }
 
     public void execute(String commandLine) {
@@ -79,7 +80,6 @@ public class ToDoListConsoleController {
         String[] subcommandRest = commandLine.split(" ", 2);
         String subcommand = subcommandRest[0];
         if (subcommand.equals("project")) {
-            AddProjectUseCase addProjectUseCase = new AddProjectService(repository);
             AddProjectInput addProjectInput = new AddProjectInput();
             addProjectInput.toDoListId = TaskList.DEFAULT_TO_DO_LIST_ID;
             addProjectInput.projectName = subcommandRest[1];
