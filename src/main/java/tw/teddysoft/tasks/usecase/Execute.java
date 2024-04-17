@@ -1,7 +1,10 @@
 package tw.teddysoft.tasks.usecase;
 
+import tw.teddysoft.tasks.adapter.presenter.HelpConsolePresenter;
 import tw.teddysoft.tasks.adapter.presenter.ShowConsolePresenter;
 import tw.teddysoft.tasks.entity.ToDoList;
+import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpInput;
+import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowInput;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowOutput;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowUseCase;
@@ -10,14 +13,11 @@ import tw.teddysoft.tasks.usecase.port.in.project.add.AddProjectInput;
 import tw.teddysoft.tasks.usecase.port.in.project.add.AddProjectUseCase;
 import tw.teddysoft.tasks.TaskList;
 import tw.teddysoft.tasks.usecase.port.out.todolist.show.ShowPresenter;
-import tw.teddysoft.tasks.usecase.service.AddProjectService;
+import tw.teddysoft.tasks.usecase.service.*;
 import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskInput;
-import tw.teddysoft.tasks.usecase.service.AddTaskService;
 import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneInput;
-import tw.teddysoft.tasks.usecase.service.SetDoneService;
-import tw.teddysoft.tasks.usecase.service.ShowService;
 
 import java.io.PrintWriter;
 
@@ -55,7 +55,9 @@ public class Execute {
                 setDone(commandRest[1], false);
                 break;
             case "help":
-                new Help(out).help();
+                HelpUseCase helpUseCase = new HelpService(new HelpConsolePresenter(out));
+                HelpInput helpInput = new HelpInput();
+                helpUseCase.execute(helpInput);
                 break;
             default:
                 new Error(out).error(command);
