@@ -30,6 +30,7 @@ public class ToDoListConsoleController {
     private final ShowPresenter showPresenter;
     private AddProjectUseCase addProjectUseCase;
     private final AddTaskUseCase addTaskUseCase;
+    private final SetDoneUseCase setDoneUseCase;
 
     public ToDoListConsoleController(
             PrintWriter out,
@@ -37,7 +38,8 @@ public class ToDoListConsoleController {
             ShowUseCase showUseCase,
             ShowPresenter showPresenter,
             AddProjectUseCase addProjectUseCase,
-            AddTaskUseCase addTaskUseCase) {
+            AddTaskUseCase addTaskUseCase,
+            SetDoneUseCase setDoneUseCase) {
 
         this.out = out;
         this.repository = repository;
@@ -45,6 +47,7 @@ public class ToDoListConsoleController {
         this.showPresenter = showPresenter;
         this.addProjectUseCase = addProjectUseCase;
         this.addTaskUseCase = addTaskUseCase;
+        this.setDoneUseCase = setDoneUseCase;
     }
 
     public void execute(String commandLine) {
@@ -99,7 +102,6 @@ public class ToDoListConsoleController {
     }
 
     private void setDone(String taskId, boolean done) {
-        SetDoneUseCase setDoneUseCase = new SetDoneService(repository);
         SetDoneInput input = new SetDoneInput();
         input.toDoListId = TaskList.DEFAULT_TO_DO_LIST_ID;
         input.taskId = taskId;
