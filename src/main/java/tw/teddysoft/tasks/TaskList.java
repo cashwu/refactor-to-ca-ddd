@@ -3,6 +3,7 @@ package tw.teddysoft.tasks;
 import tw.teddysoft.tasks.adapter.presenter.ShowConsolePresenter;
 import tw.teddysoft.tasks.entity.*;
 import tw.teddysoft.tasks.adapter.controller.ToDoListConsoleController;
+import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowUseCase;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
 import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepository;
@@ -10,6 +11,7 @@ import tw.teddysoft.tasks.usecase.port.out.todolist.show.ShowPresenter;
 import tw.teddysoft.tasks.usecase.service.AddProjectService;
 import tw.teddysoft.tasks.usecase.service.ShowService;
 import tw.teddysoft.tasks.usecase.port.in.project.add.AddProjectUseCase;
+import tw.teddysoft.tasks.usecase.service.AddTaskService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,6 +28,7 @@ public final class TaskList implements Runnable {
     private final ShowUseCase showUseCase;
     private final ShowPresenter showPresenter;
     private final AddProjectUseCase addProjectUseCase;
+    private final AddTaskUseCase addTaskUseCase;
 
     public static void main(String[] args) throws Exception {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -43,6 +46,7 @@ public final class TaskList implements Runnable {
         showUseCase = new ShowService(repository);
         showPresenter = new ShowConsolePresenter(out);
         addProjectUseCase = new AddProjectService(repository);
+        addTaskUseCase = new AddTaskService(repository);
     }
 
     public void run() {
@@ -63,7 +67,8 @@ public final class TaskList implements Runnable {
                     repository,
                     showUseCase,
                     showPresenter,
-                    addProjectUseCase).execute(command);
+                    addProjectUseCase,
+                    addTaskUseCase).execute(command);
         }
     }
 }
