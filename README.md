@@ -46,3 +46,9 @@ curl http://localhost:8080/show
 
 ## Step 8
 Add Persistent Objects
+
+## Step 9
+Use Relational Database via JPA
+
+
+
