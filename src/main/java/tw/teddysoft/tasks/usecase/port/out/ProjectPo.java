@@ -1,14 +1,22 @@
 package tw.teddysoft.tasks.usecase.port.out;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "project")
 public class ProjectPo implements Comparable<ProjectPo> {
 
+    @Id
+    @Column(name = "name")
     private String name;
 
+    @Column(name="project_order")
     private int order;
 
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "id_fk")
     private List<TaskPo> taskPos;
 
     public ProjectPo() {

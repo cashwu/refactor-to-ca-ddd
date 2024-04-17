@@ -1,13 +1,22 @@
 package tw.teddysoft.tasks.usecase.port.out;
 
+import javax.persistence.*;
 import java.util.*;
 
+@Entity
+@Table(name = "todolist")
 public class ToDoListPo {
 
+    @Id
+    @Column(name = "id")
     private String id;
 
+    @Column(name = "last_task_id")
     private Long lastId;
 
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "id_fk")
+    @OrderBy("order")
     private Set<ProjectPo> projectPos;
 
     public ToDoListPo() {

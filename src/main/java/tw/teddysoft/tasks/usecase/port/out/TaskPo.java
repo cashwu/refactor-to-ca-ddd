@@ -1,11 +1,22 @@
 package tw.teddysoft.tasks.usecase.port.out;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "task")
 public class TaskPo {
 
+    @Id
+    @Column(name = "id")
     private String id;
 
+    @Column(name = "description")
     private String description;
 
+    @Column(name = "done")
     private Boolean done;
 
 
