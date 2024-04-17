@@ -3,6 +3,7 @@ package tw.teddysoft.tasks.entity;
 import tw.teddysoft.ezddd.core.entity.AggregateRoot;
 import tw.teddysoft.ezddd.core.entity.DomainEvent;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class ToDoList extends AggregateRoot<ToDoListId, DomainEvent> {
@@ -73,6 +74,24 @@ public class ToDoList extends AggregateRoot<ToDoListId, DomainEvent> {
 
     public long getTaskLastId(){
         return lastTaskId;
+    }
+
+    public void setDeadline(TaskId taskId, LocalDateTime deadline) {
+        if (!containTask(taskId))
+            throw new IllegalStateException("Task Id " + taskId + "does not exist");
+
+        getTaskInternal(taskId).ifPresent(t -> t.setDeadline(deadline));
+    }
+
+    public Optional<Task> getTask(TaskId taskId) {
+        return getTaskInternal(taskId).map(ReadOnlyTask::new);
+    }
+
+    private Optional<Task> getTaskInternal(TaskId taskId) {
+        return projects.stream()
+                .flatMap(project -> project.getTasks().stream())
+                .filter(task -> task.getId().equals(taskId))
+                .findFirst();
     }
 
     private long nextTaskId() {

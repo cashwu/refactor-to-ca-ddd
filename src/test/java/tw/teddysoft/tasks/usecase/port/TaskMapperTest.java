@@ -5,6 +5,8 @@ import tw.teddysoft.tasks.entity.Task;
 import tw.teddysoft.tasks.entity.TaskId;
 import tw.teddysoft.tasks.usecase.port.out.TaskPo;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -34,6 +36,8 @@ public class TaskMapperTest {
         taskPo.setId(id);
         taskPo.setDescription(description);
         taskPo.setDone(done);
+        var deadline = LocalDateTime.of(2024, 3, 5, 12, 0, 0);
+        taskPo.setDeadline(deadline);
 
         // Act
         Task task = TaskMapper.toDomain(taskPo);
@@ -42,6 +46,20 @@ public class TaskMapperTest {
         assertNotNull(task);
         assertEquals(id, task.getId().value());
         assertEquals(description, task.getDescription());
+        assertEquals(deadline, task.getDeadline());
+    }
+
+    @Test
+    public void testToPo() {
+        var deadline = LocalDateTime.of(2024, 3, 5, 12, 0, 0);
+        Task task = new Task(TaskId.of("1"), "This is a test task.", false, deadline);
+
+        var taskPo = TaskMapper.toPo(task);
+
+        assertEquals(taskPo.getId(), task.getId().value());
+        assertEquals(taskPo.getDescription(), task.getDescription());
+        assertEquals(taskPo.getDone(), task.isDone());
+        assertEquals(taskPo.getDeadline(), task.getDeadline());
     }
 
     @Test

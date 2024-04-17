@@ -34,6 +34,6 @@ public class AddTaskService implements AddTaskUseCase {
                 input.description,
                 input.done);
         repository.save(toDoList);
-        return CqrsOutput.create().succeed().setId(toDoList.getId().value());
+        return CqrsOutput.create().succeed().setMessage("").setId(String.valueOf(toDoList.getTaskLastId()));
     }
 }

@@ -22,7 +22,7 @@ public class TaskMapper {
     }
 
     public static Task toDomain(TaskPo taskPo) {
-        return new Task(TaskId.of(taskPo.getId()), taskPo.getDescription(), taskPo.getDone());
+        return new Task(TaskId.of(taskPo.getId()), taskPo.getDescription(), taskPo.getDone(), taskPo.getDeadline());
     }
 
     public static List<Task> toDomain(List<TaskPo> taskPos) {
@@ -30,7 +30,7 @@ public class TaskMapper {
     }
 
     public static TaskPo toPo(Task task) {
-        return new TaskPo(task.getId().value(), task.getDescription(), task.isDone());
+        return new TaskPo(task.getId().value(), task.getDescription(), task.isDone(), task.getDeadline());
     }
 
     public static List<TaskPo> toPo(List<Task> tasks) {

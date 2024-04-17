@@ -22,7 +22,6 @@ public class AddProjectService implements AddProjectUseCase {
         ToDoList toDoList = repository.findById(ToDoListId.of(input.toDoListId)).get();
         toDoList.addProject(ProjectName.of(input.projectName));
         repository.save(toDoList);
-
-        return CqrsOutput.create().succeed().setId(input.toDoListId);
+        return CqrsOutput.create().succeed().setId(input.projectName);
     }
 }
