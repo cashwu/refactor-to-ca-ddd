@@ -3,6 +3,8 @@ package tw.teddysoft.tasks.usecase;
 import tw.teddysoft.tasks.adapter.presenter.HelpConsolePresenter;
 import tw.teddysoft.tasks.adapter.presenter.ShowConsolePresenter;
 import tw.teddysoft.tasks.entity.ToDoList;
+import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorInput;
+import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpInput;
 import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowInput;
@@ -60,7 +62,10 @@ public class Execute {
                 helpUseCase.execute(helpInput);
                 break;
             default:
-                new Error(out).error(command);
+                ErrorUseCase errorUseCase = new ErrorService();
+                ErrorInput errorInput = new ErrorInput();
+                errorInput.command = commandLine;
+                out.print(errorUseCase.execute(errorInput).getMessage());
                 break;
         }
     }
