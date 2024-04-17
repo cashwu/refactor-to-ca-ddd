@@ -14,6 +14,7 @@ public class TaskMapper {
         taskDto.id = task.getId().value();
         taskDto.description = task.getDescription();
         taskDto.done = task.isDone();
+        taskDto.deadline = task.getDeadline();
         return taskDto;
     }
 
