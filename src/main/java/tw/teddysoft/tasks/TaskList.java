@@ -1,6 +1,7 @@
 package tw.teddysoft.tasks;
 
 import tw.teddysoft.tasks.entity.*;
+import tw.teddysoft.tasks.entity.Error;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -66,7 +67,7 @@ public final class TaskList implements Runnable {
                 new Help(out).help();
                 break;
             default:
-                error(command);
+                new Error(out).error(command);
                 break;
         }
     }
@@ -81,10 +82,7 @@ public final class TaskList implements Runnable {
 
 
 
-    private void error(String command) {
-        out.printf("I don't know what the command \"%s\" is.", command);
-        out.println();
-    }
+
 
     private long nextId() {
         return ++lastId;
