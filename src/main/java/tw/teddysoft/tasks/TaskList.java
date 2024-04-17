@@ -1,11 +1,6 @@
 package tw.teddysoft.tasks;
 
-import tw.teddysoft.tasks.entity.Project;
-import tw.teddysoft.tasks.entity.ProjectName;
-import tw.teddysoft.tasks.entity.Task;
-import tw.teddysoft.tasks.entity.ToDoList;
-import tw.teddysoft.tasks.entity.TaskId;
-import tw.teddysoft.tasks.entity.ToDoListId;
+import tw.teddysoft.tasks.entity.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -56,7 +51,7 @@ public final class TaskList implements Runnable {
         String command = commandRest[0];
         switch (command) {
             case "show":
-                show();
+                new Show(toDoList, out).show();
                 break;
             case "add":
                 add(commandRest[1]);
@@ -73,16 +68,6 @@ public final class TaskList implements Runnable {
             default:
                 error(command);
                 break;
-        }
-    }
-
-    private void show() {
-        for (Project project : toDoList.getProjects()) {
-            out.println(project.getName());
-            for (Task task : project.getTasks()) {
-                out.printf("    [%c] %s: %s%n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription());
-            }
-            out.println();
         }
     }
 
