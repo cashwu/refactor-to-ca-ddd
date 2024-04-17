@@ -58,6 +58,10 @@ public class ToDoList extends AggregateRoot<ToDoListId, DomainEvent> {
                 .ifPresent(p -> p.setTaskDone(taskId, done));
     }
 
+    public boolean containTask(TaskId taskId) {
+        return projects.stream().anyMatch(p-> p.containTask(taskId));
+    }
+
     private long nextTaskId() {
         return ++lastTaskId;
     }

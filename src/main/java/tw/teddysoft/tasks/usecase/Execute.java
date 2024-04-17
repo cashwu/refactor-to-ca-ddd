@@ -9,6 +9,9 @@ import tw.teddysoft.tasks.usecase.service.AddProjectService;
 import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskInput;
 import tw.teddysoft.tasks.usecase.service.AddTaskService;
+import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneUseCase;
+import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneInput;
+import tw.teddysoft.tasks.usecase.service.SetDoneService;
 
 import java.io.PrintWriter;
 
@@ -35,10 +38,10 @@ public class Execute {
                 add(commandRest[1]);
                 break;
             case "check":
-                check(commandRest[1]);
+                setDone(commandRest[1], true);
                 break;
             case "uncheck":
-                uncheck(commandRest[1]);
+                setDone(commandRest[1], false);
                 break;
             case "help":
                 new Help(out).help();
@@ -70,11 +73,12 @@ public class Execute {
         }
     }
 
-    private void check(String idString) {
-        new SetDone(toDoList, out).setDone(idString, true);
-    }
-
-    private void uncheck(String idString) {
-        new SetDone(toDoList, out).setDone(idString, false);
+    private void setDone(String taskId, boolean done) {
+        SetDoneUseCase setDoneUseCase = new SetDoneService(repository);
+        SetDoneInput input = new SetDoneInput();
+        input.toDoListId = TaskList.DEFAULT_TO_DO_LIST_ID;
+        input.taskId = taskId;
+        input.done = done;
+        out.print(setDoneUseCase.execute(input).getMessage());
     }
 }
