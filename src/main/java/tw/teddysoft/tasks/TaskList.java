@@ -54,7 +54,7 @@ public final class TaskList implements Runnable {
                 new Show(toDoList, out).show();
                 break;
             case "add":
-                add(commandRest[1]);
+                new Add(toDoList, out).add(commandRest[1]);
                 break;
             case "check":
                 check(commandRest[1]);
@@ -71,30 +71,9 @@ public final class TaskList implements Runnable {
         }
     }
 
-    private void add(String commandLine) {
-        String[] subcommandRest = commandLine.split(" ", 2);
-        String subcommand = subcommandRest[0];
-        if (subcommand.equals("project")) {
-            addProject(ProjectName.of(subcommandRest[1]));
-        } else if (subcommand.equals("task")) {
-            String[] projectTask = subcommandRest[1].split(" ", 2);
-            addTask(ProjectName.of(projectTask[0]), projectTask[1]);
-        }
-    }
 
-    private void addProject(ProjectName projectName) {
-        toDoList.addProject(projectName);
-    }
 
-    private void addTask(ProjectName projectName, String description) {
-        List<Task> projectTasks = toDoList.getTasks(projectName);
-        if (projectTasks == null) {
-            out.printf("Could not find a project with the name \"%s\".", projectName);
-            out.println();
-            return;
-        }
-        toDoList.addTask(projectName, description, false);
-    }
+
 
     private void check(String idString) {
         setDone(idString, true);
