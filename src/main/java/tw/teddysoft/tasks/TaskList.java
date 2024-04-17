@@ -6,6 +6,7 @@ import tw.teddysoft.tasks.entity.*;
 import tw.teddysoft.tasks.adapter.controller.ToDoListConsoleController;
 import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneUseCase;
+import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowUseCase;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
@@ -32,6 +33,7 @@ public final class TaskList implements Runnable {
     private final AddTaskUseCase addTaskUseCase;
     private final SetDoneUseCase setDoneUseCase;
     private final HelpUseCase helpUseCase;
+    private final ErrorUseCase errorUseCase;
 
     public static void main(String[] args) throws Exception {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -52,6 +54,7 @@ public final class TaskList implements Runnable {
         addTaskUseCase = new AddTaskService(repository);
         setDoneUseCase = new SetDoneService(repository);
         helpUseCase = new HelpService(new HelpConsolePresenter(out));
+        errorUseCase = new ErrorService();
     }
 
     public void run() {
@@ -74,7 +77,8 @@ public final class TaskList implements Runnable {
                     addProjectUseCase,
                     addTaskUseCase,
                     setDoneUseCase,
-                    helpUseCase).execute(command);
+                    helpUseCase,
+                    errorUseCase).execute(command);
         }
     }
 }

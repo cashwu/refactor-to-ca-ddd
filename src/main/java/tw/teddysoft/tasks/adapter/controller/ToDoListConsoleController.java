@@ -1,19 +1,16 @@
 package tw.teddysoft.tasks.adapter.controller;
 
 import tw.teddysoft.ezddd.core.usecase.Input;
-import tw.teddysoft.tasks.adapter.presenter.HelpConsolePresenter;
 import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorInput;
 import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowInput;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowOutput;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowUseCase;
-import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
 import tw.teddysoft.tasks.usecase.port.in.project.add.AddProjectInput;
 import tw.teddysoft.tasks.usecase.port.in.project.add.AddProjectUseCase;
 import tw.teddysoft.tasks.TaskList;
 import tw.teddysoft.tasks.usecase.port.out.todolist.show.ShowPresenter;
-import tw.teddysoft.tasks.usecase.service.*;
 import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskInput;
 import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneUseCase;
@@ -30,6 +27,7 @@ public class ToDoListConsoleController {
     private final AddTaskUseCase addTaskUseCase;
     private final SetDoneUseCase setDoneUseCase;
     private final HelpUseCase helpUseCase;
+    private final ErrorUseCase errorUseCase;
 
     public ToDoListConsoleController(
             PrintWriter out,
@@ -38,7 +36,8 @@ public class ToDoListConsoleController {
             AddProjectUseCase addProjectUseCase,
             AddTaskUseCase addTaskUseCase,
             SetDoneUseCase setDoneUseCase,
-            HelpUseCase helpUseCase) {
+            HelpUseCase helpUseCase,
+            ErrorUseCase errorUseCase) {
 
         this.out = out;
         this.showUseCase = showUseCase;
@@ -47,6 +46,7 @@ public class ToDoListConsoleController {
         this.addTaskUseCase = addTaskUseCase;
         this.setDoneUseCase = setDoneUseCase;
         this.helpUseCase = helpUseCase;
+        this.errorUseCase = errorUseCase;
     }
 
     public void execute(String commandLine) {
@@ -72,7 +72,6 @@ public class ToDoListConsoleController {
                 helpUseCase.execute(new Input.NullInput());
                 break;
             default:
-                ErrorUseCase errorUseCase = new ErrorService();
                 ErrorInput errorInput = new ErrorInput();
                 errorInput.command = commandLine;
                 out.print(errorUseCase.execute(errorInput).getMessage());
