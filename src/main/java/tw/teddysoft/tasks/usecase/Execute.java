@@ -1,11 +1,11 @@
 package tw.teddysoft.tasks.usecase;
 
+import tw.teddysoft.ezddd.core.usecase.Input;
 import tw.teddysoft.tasks.adapter.presenter.HelpConsolePresenter;
 import tw.teddysoft.tasks.adapter.presenter.ShowConsolePresenter;
 import tw.teddysoft.tasks.entity.ToDoList;
 import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorInput;
 import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorUseCase;
-import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpInput;
 import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowInput;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowOutput;
@@ -58,8 +58,7 @@ public class Execute {
                 break;
             case "help":
                 HelpUseCase helpUseCase = new HelpService(new HelpConsolePresenter(out));
-                HelpInput helpInput = new HelpInput();
-                helpUseCase.execute(helpInput);
+                helpUseCase.execute(new Input.NullInput());
                 break;
             default:
                 ErrorUseCase errorUseCase = new ErrorService();
