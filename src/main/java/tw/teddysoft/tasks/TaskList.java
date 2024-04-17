@@ -1,9 +1,13 @@
 package tw.teddysoft.tasks;
 
+import tw.teddysoft.tasks.adapter.presenter.ShowConsolePresenter;
 import tw.teddysoft.tasks.entity.*;
 import tw.teddysoft.tasks.adapter.controller.ToDoListConsoleController;
+import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowUseCase;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
 import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepository;
+import tw.teddysoft.tasks.usecase.port.out.todolist.show.ShowPresenter;
+import tw.teddysoft.tasks.usecase.service.ShowService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,6 +21,9 @@ public final class TaskList implements Runnable {
     private final BufferedReader in;
     private final PrintWriter out;
     private final ToDoListRepository repository;
+    private final ShowUseCase showUseCase;
+    private final ShowPresenter showPresenter;
+
 
     public static void main(String[] args) throws Exception {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -30,6 +37,9 @@ public final class TaskList implements Runnable {
         repository = new ToDoListInMemoryRepository();
         if (repository.findById(ToDoListId.of(DEFAULT_TO_DO_LIST_ID)).isEmpty())
             repository.save(toDoList);
+
+        showUseCase = new ShowService(repository);
+        showPresenter = new ShowConsolePresenter(out);
     }
 
     public void run() {
@@ -45,7 +55,7 @@ public final class TaskList implements Runnable {
             if (command.equals(QUIT)) {
                 break;
             }
-            new ToDoListConsoleController(toDoList, out, repository).execute(command);
+            new ToDoListConsoleController(out, repository, showUseCase, showPresenter).execute(command);
         }
     }
 }

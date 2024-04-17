@@ -25,14 +25,22 @@ import java.io.PrintWriter;
 
 public class ToDoListConsoleController {
 
-    private final ToDoList toDoList;
     private final PrintWriter out;
     private final ToDoListRepository repository;
 
-    public ToDoListConsoleController(ToDoList toDoList, PrintWriter out, ToDoListRepository repository) {
-        this.toDoList = toDoList;
+    private final ShowUseCase showUseCase;
+    private final ShowPresenter showPresenter;
+
+    public ToDoListConsoleController(
+            PrintWriter out,
+            ToDoListRepository repository,
+            ShowUseCase showUseCase,
+            ShowPresenter showPresenter) {
+
         this.out = out;
         this.repository = repository;
+        this.showUseCase = showUseCase;
+        this.showPresenter = showPresenter;
     }
 
     public void execute(String commandLine) {
@@ -40,11 +48,9 @@ public class ToDoListConsoleController {
         String command = commandRest[0];
         switch (command) {
             case "show":
-                ShowUseCase showUseCase = new ShowService(repository);
                 ShowInput showInput = new ShowInput();
                 showInput.toDoListId = TaskList.DEFAULT_TO_DO_LIST_ID;
                 ShowOutput output = showUseCase.execute(showInput);
-                ShowPresenter showPresenter = new ShowConsolePresenter(out);
                 showPresenter.present(output.toDoListDto);
                 break;
             case "add":
