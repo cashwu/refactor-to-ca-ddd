@@ -1,6 +1,7 @@
 package tw.teddysoft.tasks.io.springboot;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -49,16 +50,16 @@ public class ToDoListSpringBootApp extends SpringBootServletInitializer implemen
 
     @Autowired
     public ToDoListSpringBootApp(
-                                BufferedReader in,
-                                PrintWriter out,
-                                ToDoListRepository repository,
-                                ShowUseCase showUseCase,
-                                ShowPresenter showPresenter,
-                                AddProjectUseCase addProjectUseCase,
-                                AddTaskUseCase addTaskUseCase,
-                                SetDoneUseCase setDoneUseCase,
-                                HelpUseCase helpUseCase,
-                                ErrorUseCase errorUseCase){
+            BufferedReader in,
+            PrintWriter out,
+            ToDoListRepository repository,
+            ShowUseCase showUseCase,
+            ShowPresenter showPresenter,
+            AddProjectUseCase addProjectUseCase,
+            AddTaskUseCase addTaskUseCase,
+            SetDoneUseCase setDoneUseCase,
+            @Qualifier("consoleHelp") HelpUseCase helpUseCase,
+            ErrorUseCase errorUseCase){
 
             this.in = in;
             this.out =  out;

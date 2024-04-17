@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import tw.teddysoft.tasks.config.SpringBootTestContextProvider;
 import tw.teddysoft.tasks.adapter.presenter.HelpConsolePresenter;
 import tw.teddysoft.tasks.adapter.presenter.ShowConsolePresenter;
@@ -48,7 +49,7 @@ public class SpringBootApplicationTest extends SpringBootTestContextProvider {
             AddProjectUseCase addProjectUseCase,
             AddTaskUseCase addTaskUseCase,
             SetDoneUseCase setDoneUseCase,
-            HelpUseCase helpUseCase,
+            @Qualifier("consoleHelp") HelpUseCase helpUseCase,
             ErrorUseCase errorUseCase){
 
         this.showUseCase = showUseCase;

@@ -1,4 +1,4 @@
-package tw.teddysoft.tasks.adapter.controller.console;
+package tw.teddysoft.tasks.adapter.controller.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -10,52 +10,52 @@ import org.springframework.web.bind.annotation.RestController;
 import tw.teddysoft.ezddd.core.usecase.ExitCode;
 import tw.teddysoft.ezddd.cqrs.usecase.CqrsOutput;
 import tw.teddysoft.tasks.io.springboot.config.UseCaseInjection;
-import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneInput;
-import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneUseCase;
+import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskInput;
+import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskUseCase;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static tw.teddysoft.ucontract.Contract.reject;
 
 @RestController
 @AutoConfigureAfter({UseCaseInjection.class})
-public class SetDoneController {
+public class AddTaskController {
 
-    private final SetDoneUseCase setDoneUseCase;
+    private final AddTaskUseCase addTaskUseCase;
 
     @Autowired
-    public SetDoneController(SetDoneUseCase setDoneUseCase) {
-        this.setDoneUseCase = setDoneUseCase;
+    public AddTaskController(AddTaskUseCase addTaskUseCase) {
+        this.addTaskUseCase = addTaskUseCase;
     }
 
-    @PostMapping(path = "/setdone")
+    @PostMapping(path = "/tasks")
     public ResponseEntity<CqrsOutput> addProject(
             @RequestParam("todolistId") String todolistId,
-            @RequestParam("taskId") String taskId,
-            @RequestParam("done") Boolean done) {
+            @RequestParam("projectName") String projectName,
+            @RequestParam("taskDescription") String taskDescription) {
 
         if (reject("todolistId is null or empty", () -> isNullOrEmpty(todolistId)))
             return new ResponseEntity<>(CqrsOutput.create().setMessage("Query parameter should contain key: 'todolistId'"), HttpStatus.BAD_REQUEST);
 
-        if (reject("taskId is null or empty", () -> isNullOrEmpty(taskId)))
-            return new ResponseEntity<>(CqrsOutput.create().setMessage("Query parameter should contain key: 'taskId'"), HttpStatus.BAD_REQUEST);
+        if (reject("projectName is null or empty", () -> isNullOrEmpty(projectName)))
+            return new ResponseEntity<>(CqrsOutput.create().setMessage("Query parameter should contain key: 'projectName'"), HttpStatus.BAD_REQUEST);
 
-        if (reject("done is null", () -> null == done))
-            return new ResponseEntity<>(CqrsOutput.create().setMessage("Query parameter should contain key: 'done'"), HttpStatus.BAD_REQUEST);
+        if (reject("taskDescription is null or empty", () -> isNullOrEmpty(projectName)))
+            return new ResponseEntity<>(CqrsOutput.create().setMessage("Query parameter should contain key: 'taskDescription'"), HttpStatus.BAD_REQUEST);
 
         try {
-            SetDoneInput input = new SetDoneInput();
+            AddTaskInput input = new AddTaskInput();
             input.toDoListId = todolistId;
-            input.taskId = taskId;
-            input.done = done;
-            var output = setDoneUseCase.execute(input);
+            input.projectName = projectName;
+            input.description = taskDescription;
+            var output = addTaskUseCase.execute(input);
             if (output.getExitCode() == ExitCode.SUCCESS)
                 return new ResponseEntity<>(output, HttpStatus.OK);
             return new ResponseEntity<>(output, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
             var output = CqrsOutput.create()
-                    .setId(taskId)
+                    .setId(projectName)
                     .setExitCode(ExitCode.FAILURE)
-                    .setMessage("Set a task failed caused by " + e.getMessage());
+                    .setMessage("Add a task to a project failed caused by " + e.getMessage());
             return new ResponseEntity<>(output, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
