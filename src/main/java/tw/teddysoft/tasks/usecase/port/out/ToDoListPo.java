@@ -1,9 +1,6 @@
 package tw.teddysoft.tasks.usecase.port.out;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ToDoListPo {
 
@@ -45,6 +42,6 @@ public class ToDoListPo {
     }
 
     public void setProjectPos(List<ProjectPo> projectPos) {
-        this.projectPos = new HashSet<>(projectPos);
+        this.projectPos = new LinkedHashSet<>(projectPos);
     }
 }

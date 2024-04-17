@@ -4,7 +4,6 @@ import tw.teddysoft.ezddd.core.entity.AggregateRoot;
 import tw.teddysoft.ezddd.core.entity.DomainEvent;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ToDoList extends AggregateRoot<ToDoListId, DomainEvent> {
 
@@ -13,10 +12,20 @@ public class ToDoList extends AggregateRoot<ToDoListId, DomainEvent> {
     private long lastTaskId;
 
     public ToDoList(ToDoListId id) {
-        this.id = id;
-        this.projects = new ArrayList<>();
-        this.lastTaskId = 0;
+        this(id, 0);
     }
+
+    public ToDoList(ToDoListId id, long lastTaskId) {
+        this.id = id;
+        this.lastTaskId = lastTaskId;
+        this.projects = new ArrayList<>();
+    }
+
+    public ToDoList(ToDoListId id, long lastTaskId, List<Project> projects) {
+        this(id, lastTaskId);
+        this.projects.addAll(projects);
+    }
+
     public List<Project> getProjects() {
         return projects.stream().map(project -> (Project) new ReadOnlyProject(project)).toList();
     }
@@ -60,6 +69,10 @@ public class ToDoList extends AggregateRoot<ToDoListId, DomainEvent> {
 
     public boolean containTask(TaskId taskId) {
         return projects.stream().anyMatch(p-> p.containTask(taskId));
+    }
+
+    public long getTaskLastId(){
+        return lastTaskId;
     }
 
     private long nextTaskId() {

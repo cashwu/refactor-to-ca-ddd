@@ -46,6 +46,7 @@ public class ProjectPo implements Comparable<ProjectPo> {
     }
 
     public int compareTo(ProjectPo that) {
+
         return this.getOrder() - that.getOrder();
     }
 }

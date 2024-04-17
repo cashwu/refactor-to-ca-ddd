@@ -13,7 +13,7 @@ public class ReadOnlyProject extends Project {
 
     @Override
     public List<Task> getTasks() {
-        return real.getTasks().stream().map( task -> (Task) new ReadOnlyTask(task)).toList();
+        return real.getTasks().stream().map(task -> (Task) new ReadOnlyTask(task)).toList();
     }
 
     @Override
