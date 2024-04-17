@@ -4,64 +4,72 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+import org.springframework.beans.factory.annotation.Autowired;
+import tw.teddysoft.tasks.config.SpringBootTestContextProvider;
 import tw.teddysoft.tasks.adapter.presenter.HelpConsolePresenter;
 import tw.teddysoft.tasks.adapter.presenter.ShowConsolePresenter;
-import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepository;
 import tw.teddysoft.tasks.entity.ToDoList;
 import tw.teddysoft.tasks.entity.ToDoListId;
 import tw.teddysoft.tasks.io.standard.ToDoListApp;
-import tw.teddysoft.tasks.usecase.service.*;
+import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskUseCase;
+import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneUseCase;
+import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorUseCase;
+import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
+import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowUseCase;
+import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
+import tw.teddysoft.tasks.usecase.service.HelpService;
+import tw.teddysoft.tasks.usecase.port.in.project.add.AddProjectUseCase;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 
 import static java.lang.System.lineSeparator;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static junit.framework.Assert.assertEquals;
 
-public final class ApplicationTest {
+public class SpringBootApplicationTest extends SpringBootTestContextProvider {
     public static final String PROMPT = "> ";
-    private final PipedOutputStream inStream = new PipedOutputStream();
-    private final PrintWriter inWriter = new PrintWriter(inStream, true);
-
-    private final PipedInputStream outStream = new PipedInputStream();
-    private final BufferedReader outReader = new BufferedReader(new InputStreamReader(outStream));
 
     private Thread applicationThread;
 
-    public ApplicationTest() throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(new PipedInputStream(inStream)));
-        PrintWriter out = new PrintWriter(new PipedOutputStream(outStream), true);
-        var repository = new ToDoListInMemoryRepository();
-        repository.save(new ToDoList(ToDoListId.of(ToDoListApp.DEFAULT_TO_DO_LIST_ID)));
-        var showUseCase = new ShowService(repository);
-        var showPresenter = new ShowConsolePresenter(out);
-        var addProjectUseCase = new AddProjectService(repository);
-        var addTaskUseCase = new AddTaskService(repository);
-        var setDoneUseCase = new SetDoneService(repository);
-        var helpUseCase = new HelpService(new HelpConsolePresenter(out));
-        var errorUseCase = new ErrorService();
+    private final PipedOutputStream inStream = new PipedOutputStream();
+    private final PrintWriter inWriter = new PrintWriter(inStream, true);
+    private final PipedInputStream outStream = new PipedInputStream();
+    private final BufferedReader outReader = new BufferedReader(new InputStreamReader(outStream));
 
-        ToDoListApp toDoListApp = new ToDoListApp(
-                in,
-                out,
-                showUseCase,
-                showPresenter,
-                addProjectUseCase,
-                addTaskUseCase,
-                setDoneUseCase,
-                helpUseCase,
-                errorUseCase);
-        applicationThread = new Thread(toDoListApp);
+    private final ShowUseCase showUseCase;
+    private final AddProjectUseCase addProjectUseCase;
+    private final AddTaskUseCase addTaskUseCase;
+    private final SetDoneUseCase setDoneUseCase;
+    private final ErrorUseCase errorUseCase;
+
+    @Autowired
+    public SpringBootApplicationTest(
+            ToDoListRepository repository,
+            ShowUseCase showUseCase,
+            AddProjectUseCase addProjectUseCase,
+            AddTaskUseCase addTaskUseCase,
+            SetDoneUseCase setDoneUseCase,
+            HelpUseCase helpUseCase,
+            ErrorUseCase errorUseCase){
+
+        this.showUseCase = showUseCase;
+        this.addProjectUseCase = addProjectUseCase;
+        this.addTaskUseCase = addTaskUseCase;
+        this.setDoneUseCase = setDoneUseCase;
+        this.errorUseCase = errorUseCase;
+        repository.save(new ToDoList(ToDoListId.of(ToDoListApp.DEFAULT_TO_DO_LIST_ID)));
     }
 
     @BeforeEach
     public void
-    start_the_application() {
+    start_the_application() throws IOException {
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(new PipedInputStream(inStream)));
+        PrintWriter out = new PrintWriter(new PipedOutputStream(outStream), true);
+        var helpUseCase = new HelpService(new HelpConsolePresenter(out));
+        var showPresenter = new ShowConsolePresenter(out);
+
+        ToDoListApp toDoListApp = new ToDoListApp(in, out, showUseCase, showPresenter, addProjectUseCase, addTaskUseCase, setDoneUseCase, helpUseCase, errorUseCase);
+        applicationThread = new Thread(toDoListApp);
         applicationThread.start();
     }
 
@@ -82,7 +90,7 @@ public final class ApplicationTest {
     }
 
     @Test
-    @Timeout(1000)
+    @Timeout(10000)
     public void
     it_works() throws IOException {
         execute("show");
@@ -167,9 +175,7 @@ public final class ApplicationTest {
         int length = expectedOutput.length();
         char[] buffer = new char[length];
         outReader.read(buffer, 0, length);
-
-        System.out.println(String.valueOf(buffer));
-        assertThat(String.valueOf(buffer), is(expectedOutput));
+        assertEquals(expectedOutput, String.valueOf(buffer));
     }
 
     private void readLines(String... expectedOutput) throws IOException {
