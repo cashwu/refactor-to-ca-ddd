@@ -1,19 +1,18 @@
 package tw.teddysoft.tasks;
 
+import tw.teddysoft.tasks.adapter.presenter.HelpConsolePresenter;
 import tw.teddysoft.tasks.adapter.presenter.ShowConsolePresenter;
 import tw.teddysoft.tasks.entity.*;
 import tw.teddysoft.tasks.adapter.controller.ToDoListConsoleController;
 import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneUseCase;
+import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowUseCase;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
 import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepository;
 import tw.teddysoft.tasks.usecase.port.out.todolist.show.ShowPresenter;
-import tw.teddysoft.tasks.usecase.service.AddProjectService;
-import tw.teddysoft.tasks.usecase.service.SetDoneService;
-import tw.teddysoft.tasks.usecase.service.ShowService;
+import tw.teddysoft.tasks.usecase.service.*;
 import tw.teddysoft.tasks.usecase.port.in.project.add.AddProjectUseCase;
-import tw.teddysoft.tasks.usecase.service.AddTaskService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,6 +31,7 @@ public final class TaskList implements Runnable {
     private final AddProjectUseCase addProjectUseCase;
     private final AddTaskUseCase addTaskUseCase;
     private final SetDoneUseCase setDoneUseCase;
+    private final HelpUseCase helpUseCase;
 
     public static void main(String[] args) throws Exception {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -51,6 +51,7 @@ public final class TaskList implements Runnable {
         addProjectUseCase = new AddProjectService(repository);
         addTaskUseCase = new AddTaskService(repository);
         setDoneUseCase = new SetDoneService(repository);
+        helpUseCase = new HelpService(new HelpConsolePresenter(out));
     }
 
     public void run() {
@@ -68,12 +69,12 @@ public final class TaskList implements Runnable {
             }
             new ToDoListConsoleController(
                     out,
-                    repository,
                     showUseCase,
                     showPresenter,
                     addProjectUseCase,
                     addTaskUseCase,
-                    setDoneUseCase).execute(command);
+                    setDoneUseCase,
+                    helpUseCase).execute(command);
         }
     }
 }

@@ -24,30 +24,29 @@ import java.io.PrintWriter;
 public class ToDoListConsoleController {
 
     private final PrintWriter out;
-    private final ToDoListRepository repository;
-
     private final ShowUseCase showUseCase;
     private final ShowPresenter showPresenter;
     private AddProjectUseCase addProjectUseCase;
     private final AddTaskUseCase addTaskUseCase;
     private final SetDoneUseCase setDoneUseCase;
+    private final HelpUseCase helpUseCase;
 
     public ToDoListConsoleController(
             PrintWriter out,
-            ToDoListRepository repository,
             ShowUseCase showUseCase,
             ShowPresenter showPresenter,
             AddProjectUseCase addProjectUseCase,
             AddTaskUseCase addTaskUseCase,
-            SetDoneUseCase setDoneUseCase) {
+            SetDoneUseCase setDoneUseCase,
+            HelpUseCase helpUseCase) {
 
         this.out = out;
-        this.repository = repository;
         this.showUseCase = showUseCase;
         this.showPresenter = showPresenter;
         this.addProjectUseCase = addProjectUseCase;
         this.addTaskUseCase = addTaskUseCase;
         this.setDoneUseCase = setDoneUseCase;
+        this.helpUseCase = helpUseCase;
     }
 
     public void execute(String commandLine) {
@@ -70,7 +69,6 @@ public class ToDoListConsoleController {
                 setDone(commandRest[1], false);
                 break;
             case "help":
-                HelpUseCase helpUseCase = new HelpService(new HelpConsolePresenter(out));
                 helpUseCase.execute(new Input.NullInput());
                 break;
             default:
