@@ -1,7 +1,7 @@
 package tw.teddysoft.tasks;
 
 import tw.teddysoft.tasks.entity.*;
-import tw.teddysoft.tasks.usecase.Execute;
+import tw.teddysoft.tasks.adapter.controller.ToDoListConsoleController;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
 import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepository;
 
@@ -45,7 +45,7 @@ public final class TaskList implements Runnable {
             if (command.equals(QUIT)) {
                 break;
             }
-            new Execute(toDoList, out, repository).execute(command);
+            new ToDoListConsoleController(toDoList, out, repository).execute(command);
         }
     }
 }

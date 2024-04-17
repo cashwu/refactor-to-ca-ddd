@@ -1,4 +1,4 @@
-package tw.teddysoft.tasks.usecase;
+package tw.teddysoft.tasks.adapter.controller;
 
 import tw.teddysoft.ezddd.core.usecase.Input;
 import tw.teddysoft.tasks.adapter.presenter.HelpConsolePresenter;
@@ -23,13 +23,13 @@ import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneInput;
 
 import java.io.PrintWriter;
 
-public class Execute {
+public class ToDoListConsoleController {
 
     private final ToDoList toDoList;
     private final PrintWriter out;
     private final ToDoListRepository repository;
 
-    public Execute(ToDoList toDoList, PrintWriter out, ToDoListRepository repository) {
+    public ToDoListConsoleController(ToDoList toDoList, PrintWriter out, ToDoListRepository repository) {
         this.toDoList = toDoList;
         this.out = out;
         this.repository = repository;
