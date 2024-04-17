@@ -2,6 +2,8 @@ package tw.teddysoft.tasks;
 
 import tw.teddysoft.tasks.entity.*;
 import tw.teddysoft.tasks.usecase.Execute;
+import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
+import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepository;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,6 +16,7 @@ public final class TaskList implements Runnable {
     private final ToDoList toDoList = new ToDoList(ToDoListId.of(DEFAULT_TO_DO_LIST_ID));
     private final BufferedReader in;
     private final PrintWriter out;
+    private final ToDoListRepository repository;
 
     public static void main(String[] args) throws Exception {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -24,6 +27,9 @@ public final class TaskList implements Runnable {
     public TaskList(BufferedReader reader, PrintWriter writer) {
         this.in = reader;
         this.out = writer;
+        repository = new ToDoListInMemoryRepository();
+        if (repository.findById(ToDoListId.of(DEFAULT_TO_DO_LIST_ID)).isEmpty())
+            repository.save(toDoList);
     }
 
     public void run() {
@@ -39,7 +45,7 @@ public final class TaskList implements Runnable {
             if (command.equals(QUIT)) {
                 break;
             }
-            new Execute(toDoList, out).execute(command);
+            new Execute(toDoList, out, repository).execute(command);
         }
     }
 }
