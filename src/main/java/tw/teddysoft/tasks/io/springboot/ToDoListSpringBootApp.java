@@ -14,6 +14,7 @@ import tw.teddysoft.tasks.adapter.controller.console.ToDoListConsoleController;
 import tw.teddysoft.tasks.entity.ToDoList;
 import tw.teddysoft.tasks.entity.ToDoListId;
 import tw.teddysoft.tasks.io.springboot.config.UseCaseInjection;
+import tw.teddysoft.tasks.usecase.port.in.task.deadline.DeadlineUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowUseCase;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
@@ -47,6 +48,7 @@ public class ToDoListSpringBootApp extends SpringBootServletInitializer implemen
     private final SetDoneUseCase setDoneUseCase;
     private final ErrorUseCase errorUseCase;
     private final HelpUseCase helpUseCase;
+    private final DeadlineUseCase deadlineUseCase;
 
     @Autowired
     public ToDoListSpringBootApp(
@@ -59,20 +61,22 @@ public class ToDoListSpringBootApp extends SpringBootServletInitializer implemen
             AddTaskUseCase addTaskUseCase,
             SetDoneUseCase setDoneUseCase,
             @Qualifier("consoleHelp") HelpUseCase helpUseCase,
-            ErrorUseCase errorUseCase){
+            ErrorUseCase errorUseCase,
+            DeadlineUseCase deadlineUseCase){
 
-            this.in = in;
-            this.out =  out;
-            this.showUseCase = showUseCase;
-            this.showPresenter = showPresenter;
-            this.addProjectUseCase = addProjectUseCase;
-            this.addTaskUseCase = addTaskUseCase;
-            this.setDoneUseCase = setDoneUseCase;
-            this.helpUseCase = helpUseCase;
-            this.errorUseCase = errorUseCase;
+        this.in = in;
+        this.out =  out;
+        this.showUseCase = showUseCase;
+        this.showPresenter = showPresenter;
+        this.addProjectUseCase = addProjectUseCase;
+        this.addTaskUseCase = addTaskUseCase;
+        this.setDoneUseCase = setDoneUseCase;
+        this.helpUseCase = helpUseCase;
+        this.errorUseCase = errorUseCase;
+        this.deadlineUseCase = deadlineUseCase;
 
+        if (repository.findById(ToDoListId.of(TO_DO_LIST_ID)).isEmpty())
             repository.save(new ToDoList(ToDoListId.of(TO_DO_LIST_ID)));
-
     }
 
     public static void main(String[] args) {
@@ -107,7 +111,8 @@ public class ToDoListSpringBootApp extends SpringBootServletInitializer implemen
                     addTaskUseCase,
                     setDoneUseCase,
                     helpUseCase,
-                    errorUseCase).execute(command);
+                    errorUseCase,
+                    deadlineUseCase).execute(command);
         }
     }
 }

@@ -46,6 +46,7 @@ public final class ApplicationTest {
         var setDoneUseCase = new SetDoneService(repository);
         var helpUseCase = new HelpService(new HelpConsolePresenter(out));
         var errorUseCase = new ErrorService();
+        var deadlineUseCase = new DeadlineService(repository);
 
         ToDoListApp toDoListApp = new ToDoListApp(
                 in,
@@ -56,7 +57,8 @@ public final class ApplicationTest {
                 addTaskUseCase,
                 setDoneUseCase,
                 helpUseCase,
-                errorUseCase);
+                errorUseCase,
+                deadlineUseCase);
         applicationThread = new Thread(toDoListApp);
     }
 

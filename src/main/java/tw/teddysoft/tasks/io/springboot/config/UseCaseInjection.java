@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tw.teddysoft.tasks.adapter.controller.web.HelpWebPresenter;
 import tw.teddysoft.tasks.adapter.presenter.ShowConsolePresenter;
+import tw.teddysoft.tasks.usecase.port.in.task.deadline.DeadlineUseCase;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
 import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowUseCase;
@@ -14,12 +15,7 @@ import tw.teddysoft.tasks.usecase.port.in.project.add.AddProjectUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorUseCase;
-import tw.teddysoft.tasks.usecase.service.AddTaskService;
-import tw.teddysoft.tasks.usecase.service.AddProjectService;
-import tw.teddysoft.tasks.usecase.service.ErrorService;
-import tw.teddysoft.tasks.usecase.service.HelpService;
-import tw.teddysoft.tasks.usecase.service.SetDoneService;
-import tw.teddysoft.tasks.usecase.service.ShowService;
+import tw.teddysoft.tasks.usecase.service.*;
 import tw.teddysoft.tasks.adapter.presenter.HelpConsolePresenter;
 
 import java.io.BufferedReader;
@@ -79,6 +75,11 @@ public class UseCaseInjection {
     @Bean
     public ShowPresenter showPresenter() {
         return new ShowConsolePresenter(getOut());
+    }
+
+    @Bean
+    public DeadlineUseCase deadlineUseCase() {
+        return new DeadlineService(toDoListRepository);
     }
 
 }

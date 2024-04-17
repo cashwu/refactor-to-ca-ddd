@@ -1,6 +1,8 @@
 package tw.teddysoft.tasks.adapter.controller.console;
 
 import tw.teddysoft.ezddd.core.usecase.Input;
+import tw.teddysoft.tasks.usecase.port.in.task.deadline.DeadlineInput;
+import tw.teddysoft.tasks.usecase.port.in.task.deadline.DeadlineUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorInput;
 import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
@@ -17,6 +19,8 @@ import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneInput;
 
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ToDoListConsoleController {
 
@@ -28,6 +32,7 @@ public class ToDoListConsoleController {
     private final SetDoneUseCase setDoneUseCase;
     private final HelpUseCase helpUseCase;
     private final ErrorUseCase errorUseCase;
+    private final DeadlineUseCase deadlineUseCase;
 
     public ToDoListConsoleController(
             PrintWriter out,
@@ -37,7 +42,8 @@ public class ToDoListConsoleController {
             AddTaskUseCase addTaskUseCase,
             SetDoneUseCase setDoneUseCase,
             HelpUseCase helpUseCase,
-            ErrorUseCase errorUseCase) {
+            ErrorUseCase errorUseCase,
+            DeadlineUseCase deadlineUseCase) {
 
         this.out = out;
         this.showUseCase = showUseCase;
@@ -47,6 +53,7 @@ public class ToDoListConsoleController {
         this.setDoneUseCase = setDoneUseCase;
         this.helpUseCase = helpUseCase;
         this.errorUseCase = errorUseCase;
+        this.deadlineUseCase = deadlineUseCase;
     }
 
     public void execute(String commandLine) {
@@ -70,6 +77,16 @@ public class ToDoListConsoleController {
                 break;
             case "help":
                 helpUseCase.execute(new Input.NullInput());
+                break;
+            case "deadline":
+                String[] subcommandRest = commandRest[1].split(" ", 2);
+                DeadlineInput deadlineInput = new DeadlineInput();
+                deadlineInput.toDoListId = ToDoListApp.DEFAULT_TO_DO_LIST_ID;
+                deadlineInput.taskId = subcommandRest[0];
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                String dateTimeString = subcommandRest[1] + " 00:00:00";
+                deadlineInput.deadline = LocalDateTime.parse(dateTimeString, formatter);
+                out.print(deadlineUseCase.execute(deadlineInput).getMessage());
                 break;
             default:
                 ErrorInput errorInput = new ErrorInput();
