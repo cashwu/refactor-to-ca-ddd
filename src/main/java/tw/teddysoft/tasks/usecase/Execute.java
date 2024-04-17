@@ -1,4 +1,6 @@
-package tw.teddysoft.tasks.entity;
+package tw.teddysoft.tasks.usecase;
+
+import tw.teddysoft.tasks.entity.ToDoList;
 
 import java.io.PrintWriter;
 

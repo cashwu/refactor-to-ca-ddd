@@ -1,4 +1,4 @@
-package tw.teddysoft.tasks.entity;
+package tw.teddysoft.tasks.usecase;
 
 import java.io.PrintWriter;
 
