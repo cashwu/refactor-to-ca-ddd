@@ -2,6 +2,7 @@ package tw.teddysoft.tasks.io.standard;
 
 import tw.teddysoft.tasks.adapter.presenter.HelpConsolePresenter;
 import tw.teddysoft.tasks.adapter.presenter.ShowConsolePresenter;
+import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepositoryPeer;
 import tw.teddysoft.tasks.entity.*;
 import tw.teddysoft.tasks.adapter.controller.console.ToDoListConsoleController;
 import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskUseCase;
@@ -35,7 +36,7 @@ public final class ToDoListApp implements Runnable {
     public static void main(String[] args) {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         PrintWriter out = new PrintWriter(System.out);
-        var repository = new ToDoListInMemoryRepository();
+        var repository = new ToDoListInMemoryRepository(new ToDoListInMemoryRepositoryPeer());
         repository.save(new ToDoList(ToDoListId.of(DEFAULT_TO_DO_LIST_ID)));
         var showUseCase = new ShowService(repository);
         var showPresenter = new ShowConsolePresenter(out);

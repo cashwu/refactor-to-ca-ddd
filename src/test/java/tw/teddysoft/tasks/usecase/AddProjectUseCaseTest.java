@@ -6,6 +6,7 @@ import tw.teddysoft.ezddd.cqrs.usecase.CqrsOutput;
 import tw.teddysoft.ezspec.extension.junit5.EzScenario;
 import tw.teddysoft.ezspec.keyword.Feature;
 import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepository;
+import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepositoryPeer;
 import tw.teddysoft.tasks.entity.ToDoList;
 import tw.teddysoft.tasks.entity.ToDoListId;
 import tw.teddysoft.tasks.usecase.port.in.project.add.AddProjectInput;
@@ -21,7 +22,7 @@ public class AddProjectUseCaseTest {
 
     @Test
     public void create_project_use_case_success(){
-        ToDoListRepository repository = new ToDoListInMemoryRepository();
+        ToDoListRepository repository = new ToDoListInMemoryRepository(new ToDoListInMemoryRepositoryPeer());
         ToDoList toDoList = new ToDoList(ToDoListId.of("001"));
         repository.save(toDoList);
         AddProjectUseCase useCase = new AddProjectService(repository);
@@ -39,7 +40,7 @@ public class AddProjectUseCaseTest {
 
     @EzScenario
     public void create_project_use_case_success_ezspec(){
-        ToDoListRepository repository = new ToDoListInMemoryRepository();
+        ToDoListRepository repository = new ToDoListInMemoryRepository(new ToDoListInMemoryRepositoryPeer());
         feature.newScenario()
             .Given("a to do list", env -> {
                 ToDoList toDoList = new ToDoList(ToDoListId.of("001"));

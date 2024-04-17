@@ -31,6 +31,7 @@ public class SetDoneService implements SetDoneUseCase {
             return CqrsOutput.create().setExitCode(ExitCode.FAILURE).setMessage(out.toString());
         }
         toDoList.setDone(taskId, input.done);
+        repository.save(toDoList);
         return CqrsOutput.create().setExitCode(ExitCode.SUCCESS).setMessage("");
     }
 }

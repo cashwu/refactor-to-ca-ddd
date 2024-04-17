@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Timeout;
 import tw.teddysoft.tasks.adapter.presenter.HelpConsolePresenter;
 import tw.teddysoft.tasks.adapter.presenter.ShowConsolePresenter;
 import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepository;
+import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepositoryPeer;
 import tw.teddysoft.tasks.entity.ToDoList;
 import tw.teddysoft.tasks.entity.ToDoListId;
 import tw.teddysoft.tasks.io.standard.ToDoListApp;
@@ -36,7 +37,7 @@ public final class ApplicationTest {
     public ApplicationTest() throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(new PipedInputStream(inStream)));
         PrintWriter out = new PrintWriter(new PipedOutputStream(outStream), true);
-        var repository = new ToDoListInMemoryRepository();
+        var repository = new ToDoListInMemoryRepository(new ToDoListInMemoryRepositoryPeer());
         repository.save(new ToDoList(ToDoListId.of(ToDoListApp.DEFAULT_TO_DO_LIST_ID)));
         var showUseCase = new ShowService(repository);
         var showPresenter = new ShowConsolePresenter(out);

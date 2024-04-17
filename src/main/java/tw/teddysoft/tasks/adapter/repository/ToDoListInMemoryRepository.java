@@ -1,34 +1,32 @@
 package tw.teddysoft.tasks.adapter.repository;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import tw.teddysoft.tasks.entity.ToDoList;
 import tw.teddysoft.tasks.entity.ToDoListId;
+import tw.teddysoft.tasks.usecase.port.ToDoListMapper;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
 
 public class ToDoListInMemoryRepository implements ToDoListRepository {
 
-    private final List<ToDoList> store;
+    private final ToDoListRepositoryPeer peer;
 
-    public ToDoListInMemoryRepository() {
-        this.store = new ArrayList<>();
+    public ToDoListInMemoryRepository(ToDoListRepositoryPeer peer) {
+        this.peer = peer;
     }
 
     @Override
     public void save(ToDoList toDoList) {
-        store.removeIf(x -> x.getId().equals(toDoList.getId()));
-        store.add(toDoList);
+        peer.save(ToDoListMapper.toPo(toDoList));
     }
 
     @Override
     public void delete(ToDoList toDoList) {
-        store.removeIf(x -> x.getId().equals(toDoList.getId()));
+        peer.delete(ToDoListMapper.toPo(toDoList));
     }
 
     @Override
     public Optional<ToDoList> findById(ToDoListId toDoListId) {
-        return store.stream().filter(x -> x.getId().equals(toDoListId)).findFirst();
+        return peer.findById(toDoListId.value()).map(ToDoListMapper::toDomain);
     }
 }
