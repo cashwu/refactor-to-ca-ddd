@@ -43,3 +43,6 @@ curl http://localhost:8080/help
 
 Show
 curl http://localhost:8080/show
+
+## Step 8
+Add Persistent Objects
