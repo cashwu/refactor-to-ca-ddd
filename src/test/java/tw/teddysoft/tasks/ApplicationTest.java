@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+import tw.teddysoft.tasks.io.ToDoListApp;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,8 +30,8 @@ public final class ApplicationTest {
     public ApplicationTest() throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(new PipedInputStream(inStream)));
         PrintWriter out = new PrintWriter(new PipedOutputStream(outStream), true);
-        TaskList taskList = new TaskList(in, out);
-        applicationThread = new Thread(taskList);
+        ToDoListApp toDoListApp = new ToDoListApp(in, out);
+        applicationThread = new Thread(toDoListApp);
     }
 
     @BeforeEach
