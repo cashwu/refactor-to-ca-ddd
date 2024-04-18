@@ -62,4 +62,6 @@ Command: add task2 [project name] [task id] [task name]
 ## Step 12
 Add New Feature: Deletion
 
+## Step 13
+Add New Feature: View by Deadline
 
