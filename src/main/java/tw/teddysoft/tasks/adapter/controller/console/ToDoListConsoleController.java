@@ -124,6 +124,15 @@ public class ToDoListConsoleController {
             addTaskInput.description = projectTask[1];
             addTaskInput.done = false;
             out.print(addTaskUseCase.execute(addTaskInput).getMessage());
+        } else if (subcommand.equals("task2")) {
+            String[] projectTask = subcommandRest[1].split(" ", 3);
+            AddTaskInput addTaskInput = new AddTaskInput();
+            addTaskInput.toDoListId = ToDoListApp.DEFAULT_TO_DO_LIST_ID;
+            addTaskInput.projectName = projectTask[0];
+            addTaskInput.taskId = projectTask[1];
+            addTaskInput.description = projectTask[2];
+            addTaskInput.done = false;
+            out.print(addTaskUseCase.execute(addTaskInput).getMessage());
         }
     }
 

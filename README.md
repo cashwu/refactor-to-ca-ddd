@@ -57,3 +57,4 @@ Add New Feature: Deadlines
 
 ## Step 11
 Add New Feature: Customisable IDs
+Command: add task2 [project name] [task id] [task name]

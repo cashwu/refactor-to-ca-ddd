@@ -20,9 +20,13 @@ public class ShowConsolePresenter implements ShowPresenter {
         for (ProjectDto project : doListDto.projectDots) {
             out.println(project.name);
             for (TaskDto task : project.taskDtos) {
-                out.printf("    [%c] %d: %s%n", (task.done? 'x' : ' '), Long.valueOf(task.id), task.description);
+                if (null != task.deadline)
+                    out.printf("    [%c] %s: %s  %s%n", (task.done? 'x' : ' '), task.id, task.description, task.deadline.toLocalDate().toString());
+                else
+                    out.printf("    [%c] %s: %s%n", (task.done? 'x' : ' '), task.id, task.description);
             }
             out.println();
+            out.flush();
         }
     }
 }
