@@ -51,6 +51,11 @@ public class ToDoList extends AggregateRoot<ToDoListId, DomainEvent> {
         project.ifPresent(p -> p.addTask(new Task(TaskId.of(nextTaskId()), description, done)));
     }
 
+    public void addTask(ProjectName projectName, TaskId taskId, String description, boolean done) {
+        Optional<Project> project = getProject(projectName);
+        project.ifPresent(p -> p.addTask(new Task(taskId, description, done, null)));
+    }
+    
     public Optional<Project> getProject(ProjectName projectName) {
         return projects.stream().filter(p -> p.getName().equals(projectName)).findFirst();
     }

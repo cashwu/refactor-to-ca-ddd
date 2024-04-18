@@ -7,4 +7,5 @@ public class AddTaskInput implements Input {
     public String projectName;
     public String description;
     public boolean done;
+    public String taskId;
 }

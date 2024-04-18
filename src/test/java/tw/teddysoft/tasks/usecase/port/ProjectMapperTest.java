@@ -19,8 +19,8 @@ public class ProjectMapperTest {
     @Test
     void toDto() {
         List<Task> tasks = new ArrayList<>();
-        tasks.add(new Task(TaskId.of("Task 1"), "Study DDD" , true));
-        tasks.add(new Task(TaskId.of("Task 2"), "Study CA", false));
+        tasks.add(new Task(TaskId.of("Task1"), "Study DDD" , true));
+        tasks.add(new Task(TaskId.of("Task2"), "Study CA", false));
         Project project = new Project(ProjectName.of("Project 1"), tasks);
 
         ProjectDto projectDto = ProjectMapper.toDto(project);
@@ -60,8 +60,8 @@ public class ProjectMapperTest {
     @Test
     void toPo() {
         List<Task> tasks = new ArrayList<>();
-        tasks.add(new Task(TaskId.of("Task 1"), "Study DDD" , true));
-        tasks.add(new Task(TaskId.of("Task 2"), "Study CA", false));
+        tasks.add(new Task(TaskId.of("Task1"), "Study DDD" , true));
+        tasks.add(new Task(TaskId.of("Task2"), "Study CA", false));
         Project project = new Project(ProjectName.of("My Project"), tasks);
 
         ProjectPo projectPo = ProjectMapper.toPo(project, 0);
