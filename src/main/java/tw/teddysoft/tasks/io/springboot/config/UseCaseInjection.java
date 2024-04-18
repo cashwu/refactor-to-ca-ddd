@@ -15,6 +15,7 @@ import tw.teddysoft.tasks.usecase.port.out.todolist.show.ShowPresenter;
 import tw.teddysoft.tasks.usecase.port.in.project.add.AddProjectUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneUseCase;
+import tw.teddysoft.tasks.usecase.port.in.task.delete.DeleteTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorUseCase;
 import tw.teddysoft.tasks.usecase.service.*;
 import tw.teddysoft.tasks.adapter.presenter.HelpConsolePresenter;
@@ -88,4 +89,8 @@ public class UseCaseInjection {
         return new TodayService(toDoListRepository);
     }
 
+    @Bean
+    public DeleteTaskUseCase deleteTaskUseCase() {
+        return new DeleteTaskService(toDoListRepository);
+    }
 }

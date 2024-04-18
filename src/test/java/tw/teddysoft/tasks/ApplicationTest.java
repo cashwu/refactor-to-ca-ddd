@@ -48,6 +48,7 @@ public final class ApplicationTest {
         var errorUseCase = new ErrorService();
         var deadlineUseCase = new DeadlineService(repository);
         var todayUseCase = new TodayService(repository);
+        var deleteTaskUseCase = new DeleteTaskService(repository);
 
         ToDoListApp toDoListApp = new ToDoListApp(
                 in,
@@ -60,7 +61,8 @@ public final class ApplicationTest {
                 helpUseCase,
                 errorUseCase,
                 deadlineUseCase,
-                todayUseCase);
+                todayUseCase,
+                deleteTaskUseCase);
         applicationThread = new Thread(toDoListApp);
     }
 

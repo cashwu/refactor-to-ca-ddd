@@ -15,6 +15,7 @@ import tw.teddysoft.tasks.entity.ToDoList;
 import tw.teddysoft.tasks.entity.ToDoListId;
 import tw.teddysoft.tasks.io.springboot.config.UseCaseInjection;
 import tw.teddysoft.tasks.usecase.port.in.task.deadline.DeadlineUseCase;
+import tw.teddysoft.tasks.usecase.port.in.task.delete.DeleteTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.today.TodayUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowUseCase;
@@ -51,6 +52,7 @@ public class ToDoListSpringBootApp extends SpringBootServletInitializer implemen
     private final HelpUseCase helpUseCase;
     private final DeadlineUseCase deadlineUseCase;
     private final TodayUseCase todayUseCase;
+    private final DeleteTaskUseCase deleteTaskUseCase;
 
     @Autowired
     public ToDoListSpringBootApp(
@@ -65,7 +67,8 @@ public class ToDoListSpringBootApp extends SpringBootServletInitializer implemen
             @Qualifier("consoleHelp") HelpUseCase helpUseCase,
             ErrorUseCase errorUseCase,
             DeadlineUseCase deadlineUseCase,
-            TodayUseCase todayUseCase){
+            TodayUseCase todayUseCase,
+            DeleteTaskUseCase deleteTaskUseCase){
 
         this.in = in;
         this.out =  out;
@@ -78,6 +81,7 @@ public class ToDoListSpringBootApp extends SpringBootServletInitializer implemen
         this.errorUseCase = errorUseCase;
         this.deadlineUseCase = deadlineUseCase;
         this.todayUseCase = todayUseCase;
+        this.deleteTaskUseCase = deleteTaskUseCase;
 
         if (repository.findById(ToDoListId.of(TO_DO_LIST_ID)).isEmpty())
             repository.save(new ToDoList(ToDoListId.of(TO_DO_LIST_ID)));
@@ -117,7 +121,8 @@ public class ToDoListSpringBootApp extends SpringBootServletInitializer implemen
                     helpUseCase,
                     errorUseCase,
                     deadlineUseCase,
-                    todayUseCase).execute(command);
+                    todayUseCase,
+                    deleteTaskUseCase).execute(command);
         }
     }
 }
