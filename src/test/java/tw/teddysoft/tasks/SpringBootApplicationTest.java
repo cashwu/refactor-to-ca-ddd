@@ -180,6 +180,9 @@ public class SpringBootApplicationTest extends SpringBootTestContextProvider {
                 "  add task <project name> <task description>",
                 "  check <task ID>",
                 "  uncheck <task ID>",
+                "  deadline <task ID> <deadline, format: yyyy-mm-dd>",
+                "  add task2 <project name> <task ID> <task description>",
+                "  delete <task ID>",
                 ""
         );
 

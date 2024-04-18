@@ -18,7 +18,6 @@ public class HelpService implements HelpUseCase {
 
     @Override
     public HelpOutput execute(Input.NullInput input) {
-
         HelpDto helpDto = new HelpDto();
         helpDto.heading = "Commands:";
         helpDto.commands.add("show");
@@ -26,6 +25,9 @@ public class HelpService implements HelpUseCase {
         helpDto.commands.add("add task <project name> <task description>");
         helpDto.commands.add("check <task ID>");
         helpDto.commands.add("uncheck <task ID>");
+        helpDto.commands.add("deadline <task ID> <deadline, format: yyyy-mm-dd>");
+        helpDto.commands.add("add task2 <project name> <task ID> <task description>");
+        helpDto.commands.add("delete <task ID>");
         presenter.present(helpDto);
 
         var output = HelpOutput.create();
