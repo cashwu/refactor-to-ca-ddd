@@ -55,7 +55,7 @@ public class ToDoList extends AggregateRoot<ToDoListId, DomainEvent> {
         Optional<Project> project = getProject(projectName);
         project.ifPresent(p -> p.addTask(new Task(taskId, description, done, null)));
     }
-    
+
     public Optional<Project> getProject(ProjectName projectName) {
         return projects.stream().filter(p -> p.getName().equals(projectName)).findFirst();
     }
@@ -97,6 +97,10 @@ public class ToDoList extends AggregateRoot<ToDoListId, DomainEvent> {
                 .flatMap(project -> project.getTasks().stream())
                 .filter(task -> task.getId().equals(taskId))
                 .findFirst();
+    }
+
+    public void deleteTask(TaskId taskId) {
+        projects.forEach(project -> project.getTasks().removeIf(task -> task.getId().equals(taskId)));
     }
 
     private long nextTaskId() {
