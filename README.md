@@ -67,3 +67,5 @@ Add New Feature: View by Deadline
 
 ## Step 14
 Refactor Console Controller
+* ToDoListApp to use the new ConsoleControllerExecutor
+* Run ToDoListApp and ToDoListSpringBootApp, compare their error handling capability regarding error inputs. 

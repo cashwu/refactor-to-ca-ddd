@@ -1,12 +1,12 @@
 package tw.teddysoft.tasks.io.standard;
 
+import tw.teddysoft.tasks.adapter.in.controller.console.*;
 import tw.teddysoft.tasks.adapter.out.presenter.HelpConsolePresenter;
 import tw.teddysoft.tasks.adapter.out.presenter.ShowConsolePresenter;
 import tw.teddysoft.tasks.adapter.out.presenter.ViewTaskConsolePresenter;
 import tw.teddysoft.tasks.adapter.out.repository.ToDoListInMemoryRepository;
 import tw.teddysoft.tasks.adapter.out.repository.ToDoListInMemoryRepositoryPeer;
 import tw.teddysoft.tasks.entity.*;
-import tw.teddysoft.tasks.adapter.in.controller.console.ToDoListConsoleController;
 import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.deadline.DeadlineUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.delete.DeleteTaskUseCase;
@@ -31,18 +31,7 @@ public final class ToDoListApp implements Runnable {
     public static final String DEFAULT_TO_DO_LIST_ID = "001";
     private final BufferedReader in;
     private final PrintWriter out;
-    private final ShowUseCase showUseCase;
-    private final ShowPresenter showPresenter;
-    private final AddProjectUseCase addProjectUseCase;
-    private final AddTaskUseCase addTaskUseCase;
-    private final SetDoneUseCase setDoneUseCase;
-    private final HelpUseCase helpUseCase;
-    private final ErrorUseCase errorUseCase;
-    private final DeadlineUseCase deadlineUseCase;
-    private final TodayUseCase todayUseCase;
-    private final DeleteTaskUseCase deleteTaskUseCase;
-    private final ViewTaskUseCase viewTaskUseCase;
-    private final ViewTaskPresenter viewTaskPresenter;
+    private final ConsoleControllerExecutor consoleControllerExecutor;
 
     public static void main(String[] args) {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -98,19 +87,17 @@ public final class ToDoListApp implements Runnable {
 
         this.in = reader;
         this.out = writer;
-        this.showUseCase = showUseCase;
-        this.showPresenter = showPresenter;
-        this.addProjectUseCase = addProjectUseCase;
-        this.addTaskUseCase = addTaskUseCase;
-        this.setDoneUseCase = setDoneUseCase;
-        this.helpUseCase = helpUseCase;
-        this.errorUseCase = errorUseCase;
-        this.deadlineUseCase = deadlineUseCase;
-        this.todayUseCase = todayUseCase;
-        this.deleteTaskUseCase = deleteTaskUseCase;
-        this.viewTaskUseCase = viewTaskUseCase;
-        this.viewTaskPresenter = viewTaskPresenter;
-
+        consoleControllerExecutor = new ConsoleControllerExecutor(out);
+        consoleControllerExecutor.registerController(ToDoListCommands.HELP, new HelpConsoleController(helpUseCase));
+        consoleControllerExecutor.registerController(ToDoListCommands.ADD, new AddConsoleController(addProjectUseCase, addTaskUseCase));
+        consoleControllerExecutor.registerController(ToDoListCommands.SHOW, new ShowConsoleController(showUseCase, showPresenter));
+        consoleControllerExecutor.registerController(ToDoListCommands.CHECK, new CheckConsoleController(setDoneUseCase));
+        consoleControllerExecutor.registerController(ToDoListCommands.UNCHECK, new UncheckConsoleController(setDoneUseCase));
+        consoleControllerExecutor.registerController(ToDoListCommands.DEADLINE, new DeadlineConsoleController(deadlineUseCase));
+        consoleControllerExecutor.registerController(ToDoListCommands.TODAY, new TodayConsoleController(todayUseCase, viewTaskPresenter));
+        consoleControllerExecutor.registerController(ToDoListCommands.DELETE, new DeleteConsoleController(deleteTaskUseCase));
+        consoleControllerExecutor.registerController(ToDoListCommands.VIEW, new ViewConsoleController(viewTaskUseCase, viewTaskPresenter));
+        consoleControllerExecutor.registerController(ToDoListCommands.ERROR, new ErrorConsoleController(out, errorUseCase));
     }
 
     public void run() {
@@ -126,20 +113,7 @@ public final class ToDoListApp implements Runnable {
             if (command.equals(QUIT)) {
                 break;
             }
-            new ToDoListConsoleController(
-                    out,
-                    showUseCase,
-                    showPresenter,
-                    addProjectUseCase,
-                    addTaskUseCase,
-                    setDoneUseCase,
-                    helpUseCase,
-                    errorUseCase,
-                    deadlineUseCase,
-                    todayUseCase,
-                    deleteTaskUseCase,
-                    viewTaskUseCase,
-                    viewTaskPresenter).execute(command);
+            consoleControllerExecutor.execute(command);
         }
     }
 }

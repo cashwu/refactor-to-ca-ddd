@@ -41,4 +41,8 @@ public class Project implements Entity<ProjectName> {
     public void addTask(Task task){
         tasks.add(task);
     }
+
+    public boolean containsTask(TaskId taskId) {
+        return tasks.stream().anyMatch(task -> task.getId().equals(taskId));
+    }
 }

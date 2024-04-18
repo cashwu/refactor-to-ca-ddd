@@ -103,6 +103,14 @@ public class ToDoList extends AggregateRoot<ToDoListId, DomainEvent> {
         projects.forEach(project -> project.getTasks().removeIf(task -> task.getId().equals(taskId)));
     }
 
+    public boolean containsProject(ProjectName projectName) {
+        return projects.stream().anyMatch(p-> p.getName().equals(projectName));
+    }
+
+    public boolean containsTask(TaskId taskId) {
+        return projects.stream().anyMatch(p-> p.containsTask(taskId));
+    }
+
     private long nextTaskId() {
         return ++lastTaskId;
     }
