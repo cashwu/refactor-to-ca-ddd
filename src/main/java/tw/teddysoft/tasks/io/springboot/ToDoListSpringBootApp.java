@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
-import tw.teddysoft.tasks.adapter.controller.console.ToDoListConsoleController;
+import tw.teddysoft.tasks.adapter.in.controller.console.ToDoListConsoleController;
 import tw.teddysoft.tasks.entity.ToDoList;
 import tw.teddysoft.tasks.entity.ToDoListId;
 import tw.teddysoft.tasks.io.springboot.config.UseCaseInjection;

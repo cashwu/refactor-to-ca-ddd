@@ -1,4 +1,4 @@
-package tw.teddysoft.tasks.adapter.controller.web;
+package tw.teddysoft.tasks.adapter.in.controller.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;

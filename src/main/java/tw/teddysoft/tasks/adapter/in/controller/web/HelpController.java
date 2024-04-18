@@ -1,35 +1,33 @@
-package tw.teddysoft.tasks.adapter.controller.web;
+package tw.teddysoft.tasks.adapter.in.controller.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tw.teddysoft.ezddd.core.usecase.ExitCode;
+import tw.teddysoft.ezddd.core.usecase.Input;
 import tw.teddysoft.ezddd.cqrs.usecase.CqrsOutput;
 import tw.teddysoft.tasks.io.springboot.config.UseCaseInjection;
-import tw.teddysoft.tasks.io.standard.ToDoListApp;
-import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowInput;
-import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowUseCase;
+import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
 
 @RestController
 @AutoConfigureAfter({UseCaseInjection.class})
-public class ShowController {
+public class HelpController {
 
-    private final ShowUseCase showUseCase;
+    private final HelpUseCase helpUseCase;
 
     @Autowired
-    public ShowController(ShowUseCase showUseCase) {
-        this.showUseCase = showUseCase;
+    public HelpController(@Qualifier("webHelp") HelpUseCase helpUseCase) {
+        this.helpUseCase = helpUseCase;
     }
 
-    @GetMapping(path = "/show")
+    @GetMapping(path = "/help")
     public ResponseEntity<CqrsOutput> help() {
         try {
-            ShowInput input = new ShowInput();
-            input.toDoListId = ToDoListApp.DEFAULT_TO_DO_LIST_ID;
-            var output = showUseCase.execute(input);
+            var output = helpUseCase.execute(new Input.NullInput());
             if (output.getExitCode() == ExitCode.SUCCESS)
                 return new ResponseEntity<>(output, HttpStatus.OK);
             return new ResponseEntity<>(output, HttpStatus.INTERNAL_SERVER_ERROR);

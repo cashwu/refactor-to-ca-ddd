@@ -4,11 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import tw.teddysoft.tasks.adapter.repository.ToDoListCrudRepository;
-import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepository;
-import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepositoryPeer;
+import tw.teddysoft.tasks.adapter.out.repository.ToDoListCrudRepository;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
-import tw.teddysoft.tasks.adapter.repository.ToDoListCrudRepositoryPeer;
+import tw.teddysoft.tasks.adapter.out.repository.ToDoListCrudRepositoryPeer;
 
 @PropertySource(value = "classpath:/application.properties")
 @Configuration("ToDoListRepositoryInjection")

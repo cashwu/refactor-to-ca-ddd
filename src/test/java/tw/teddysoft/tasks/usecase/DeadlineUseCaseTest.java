@@ -2,8 +2,8 @@ package tw.teddysoft.tasks.usecase;
 
 import org.junit.jupiter.api.Test;
 import tw.teddysoft.ezddd.core.usecase.ExitCode;
-import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepository;
-import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepositoryPeer;
+import tw.teddysoft.tasks.adapter.out.repository.ToDoListInMemoryRepository;
+import tw.teddysoft.tasks.adapter.out.repository.ToDoListInMemoryRepositoryPeer;
 import tw.teddysoft.tasks.entity.TaskId;
 import tw.teddysoft.tasks.entity.ToDoList;
 import tw.teddysoft.tasks.entity.ToDoListId;

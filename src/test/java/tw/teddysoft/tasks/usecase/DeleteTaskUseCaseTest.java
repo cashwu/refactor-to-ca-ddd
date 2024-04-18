@@ -2,15 +2,14 @@ package tw.teddysoft.tasks.usecase;
 
 import org.junit.jupiter.api.Test;
 import tw.teddysoft.ezddd.core.usecase.ExitCode;
-import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepository;
-import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepositoryPeer;
+import tw.teddysoft.tasks.adapter.out.repository.ToDoListInMemoryRepository;
+import tw.teddysoft.tasks.adapter.out.repository.ToDoListInMemoryRepositoryPeer;
 import tw.teddysoft.tasks.entity.TaskId;
 import tw.teddysoft.tasks.entity.ToDoList;
 import tw.teddysoft.tasks.entity.ToDoListId;
 import tw.teddysoft.tasks.io.standard.ToDoListApp;
 import tw.teddysoft.tasks.usecase.port.in.task.delete.DeleteTaskInput;
 import tw.teddysoft.tasks.usecase.port.in.task.delete.DeleteTaskUseCase;
-import tw.teddysoft.tasks.usecase.port.out.ToDoListPo;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
 import tw.teddysoft.tasks.usecase.service.DeleteTaskService;
 

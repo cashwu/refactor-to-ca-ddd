@@ -1,4 +1,4 @@
-package tw.teddysoft.tasks.adapter.controller.console;
+package tw.teddysoft.tasks.adapter.in.controller.console;
 
 import tw.teddysoft.ezddd.core.usecase.Input;
 import tw.teddysoft.tasks.usecase.port.in.task.deadline.DeadlineInput;

@@ -1,4 +1,4 @@
-package tw.teddysoft.tasks.adapter.controller.web;
+package tw.teddysoft.tasks.adapter.in.controller.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -10,28 +10,27 @@ import org.springframework.web.bind.annotation.RestController;
 import tw.teddysoft.ezddd.core.usecase.ExitCode;
 import tw.teddysoft.ezddd.cqrs.usecase.CqrsOutput;
 import tw.teddysoft.tasks.io.springboot.config.UseCaseInjection;
-import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskInput;
-import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskUseCase;
+import tw.teddysoft.tasks.usecase.port.in.project.add.AddProjectInput;
+import tw.teddysoft.tasks.usecase.port.in.project.add.AddProjectUseCase;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static tw.teddysoft.ucontract.Contract.reject;
 
 @RestController
 @AutoConfigureAfter({UseCaseInjection.class})
-public class AddTaskController {
+public class AddProjectController {
 
-    private final AddTaskUseCase addTaskUseCase;
+    private final AddProjectUseCase addProjectUseCase;
 
     @Autowired
-    public AddTaskController(AddTaskUseCase addTaskUseCase) {
-        this.addTaskUseCase = addTaskUseCase;
+    public AddProjectController(AddProjectUseCase addProjectUseCase) {
+        this.addProjectUseCase = addProjectUseCase;
     }
 
-    @PostMapping(path = "/tasks")
+    @PostMapping(path = "/projects")
     public ResponseEntity<CqrsOutput> addProject(
             @RequestParam("todolistId") String todolistId,
-            @RequestParam("projectName") String projectName,
-            @RequestParam("taskDescription") String taskDescription) {
+            @RequestParam("projectName") String projectName) {
 
         if (reject("todolistId is null or empty", () -> isNullOrEmpty(todolistId)))
             return new ResponseEntity<>(CqrsOutput.create().setMessage("Query parameter should contain key: 'todolistId'"), HttpStatus.BAD_REQUEST);
@@ -39,15 +38,11 @@ public class AddTaskController {
         if (reject("projectName is null or empty", () -> isNullOrEmpty(projectName)))
             return new ResponseEntity<>(CqrsOutput.create().setMessage("Query parameter should contain key: 'projectName'"), HttpStatus.BAD_REQUEST);
 
-        if (reject("taskDescription is null or empty", () -> isNullOrEmpty(projectName)))
-            return new ResponseEntity<>(CqrsOutput.create().setMessage("Query parameter should contain key: 'taskDescription'"), HttpStatus.BAD_REQUEST);
-
         try {
-            AddTaskInput input = new AddTaskInput();
+            AddProjectInput input = new AddProjectInput();
             input.toDoListId = todolistId;
             input.projectName = projectName;
-            input.description = taskDescription;
-            var output = addTaskUseCase.execute(input);
+            var output = addProjectUseCase.execute(input);
             if (output.getExitCode() == ExitCode.SUCCESS)
                 return new ResponseEntity<>(output, HttpStatus.OK);
             return new ResponseEntity<>(output, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -55,7 +50,7 @@ public class AddTaskController {
             var output = CqrsOutput.create()
                     .setId(projectName)
                     .setExitCode(ExitCode.FAILURE)
-                    .setMessage("Add a task to a project failed caused by " + e.getMessage());
+                    .setMessage("Add a project a to to do list failed caused by " + e.getMessage());
             return new ResponseEntity<>(output, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -1,4 +1,4 @@
-package tw.teddysoft.tasks.adapter.repository;
+package tw.teddysoft.tasks.adapter.out.repository;
 
 
 import org.springframework.data.repository.CrudRepository;

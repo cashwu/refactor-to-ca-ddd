@@ -1,11 +1,11 @@
 package tw.teddysoft.tasks.io.standard;
 
-import tw.teddysoft.tasks.adapter.presenter.HelpConsolePresenter;
-import tw.teddysoft.tasks.adapter.presenter.ShowConsolePresenter;
-import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepository;
-import tw.teddysoft.tasks.adapter.repository.ToDoListInMemoryRepositoryPeer;
+import tw.teddysoft.tasks.adapter.out.presenter.HelpConsolePresenter;
+import tw.teddysoft.tasks.adapter.out.presenter.ShowConsolePresenter;
+import tw.teddysoft.tasks.adapter.out.repository.ToDoListInMemoryRepository;
+import tw.teddysoft.tasks.adapter.out.repository.ToDoListInMemoryRepositoryPeer;
 import tw.teddysoft.tasks.entity.*;
-import tw.teddysoft.tasks.adapter.controller.console.ToDoListConsoleController;
+import tw.teddysoft.tasks.adapter.in.controller.console.ToDoListConsoleController;
 import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.deadline.DeadlineUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.delete.DeleteTaskUseCase;

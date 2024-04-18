@@ -1,4 +1,4 @@
-package tw.teddysoft.tasks.adapter.repository;
+package tw.teddysoft.tasks.adapter.out.repository;
 
 
 import tw.teddysoft.tasks.usecase.port.out.ToDoListPo;

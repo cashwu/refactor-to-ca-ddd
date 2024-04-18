@@ -1,18 +1,23 @@
-package tw.teddysoft.tasks.adapter.repository;
-
-import java.util.Optional;
+package tw.teddysoft.tasks.adapter.out.repository;
 
 import tw.teddysoft.tasks.entity.ToDoList;
 import tw.teddysoft.tasks.entity.ToDoListId;
 import tw.teddysoft.tasks.usecase.port.ToDoListMapper;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
 
-public class ToDoListInMemoryRepository implements ToDoListRepository {
+import java.util.Optional;
 
-    private final ToDoListInMemoryRepositoryPeer peer;
+public class ToDoListCrudRepository implements ToDoListRepository {
 
-    public ToDoListInMemoryRepository(ToDoListInMemoryRepositoryPeer peer) {
+    private ToDoListCrudRepositoryPeer peer;
+
+    public ToDoListCrudRepository(ToDoListCrudRepositoryPeer peer) {
         this.peer = peer;
+    }
+
+    @Override
+    public Optional<ToDoList> findById(ToDoListId toDoListId) {
+        return peer.findById(toDoListId.value()).map(ToDoListMapper::toDomain);
     }
 
     @Override
@@ -23,10 +28,5 @@ public class ToDoListInMemoryRepository implements ToDoListRepository {
     @Override
     public void delete(ToDoList toDoList) {
         peer.delete(ToDoListMapper.toPo(toDoList));
-    }
-
-    @Override
-    public Optional<ToDoList> findById(ToDoListId toDoListId) {
-        return peer.findById(toDoListId.value()).map(ToDoListMapper::toDomain);
     }
 }
