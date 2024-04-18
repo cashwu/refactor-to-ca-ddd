@@ -7,7 +7,6 @@ import java.util.List;
 
 public class TodayOutput extends CqrsOutput<TodayOutput> {
 
-    public ToDoListDto toDoListDto;
     public List<TodayDto> todayDtos;
 
     public TodayOutput setTodayDtos(List<TodayDto> todayDtos) {

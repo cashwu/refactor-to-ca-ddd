@@ -45,4 +45,8 @@ public class TestUtil {
 
         return deadlineUseCase.execute(input);
     }
+
+    public static String normalizeNewlines(String input) {
+        return input.replaceAll("\r\n", "\n").replaceAll("\r", "\n");
+    }
 }

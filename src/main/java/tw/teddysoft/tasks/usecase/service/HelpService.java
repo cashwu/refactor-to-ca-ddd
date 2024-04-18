@@ -28,6 +28,7 @@ public class HelpService implements HelpUseCase {
         helpDto.commands.add("deadline <task ID> <deadline, format: yyyy-mm-dd>");
         helpDto.commands.add("add task2 <project name> <task ID> <task description>");
         helpDto.commands.add("delete <task ID>");
+        helpDto.commands.add("view");
         presenter.present(helpDto);
 
         var output = HelpOutput.create();

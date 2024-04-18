@@ -2,6 +2,7 @@ package tw.teddysoft.tasks.io.standard;
 
 import tw.teddysoft.tasks.adapter.out.presenter.HelpConsolePresenter;
 import tw.teddysoft.tasks.adapter.out.presenter.ShowConsolePresenter;
+import tw.teddysoft.tasks.adapter.out.presenter.ViewTaskConsolePresenter;
 import tw.teddysoft.tasks.adapter.out.repository.ToDoListInMemoryRepository;
 import tw.teddysoft.tasks.adapter.out.repository.ToDoListInMemoryRepositoryPeer;
 import tw.teddysoft.tasks.entity.*;
@@ -11,10 +12,12 @@ import tw.teddysoft.tasks.usecase.port.in.task.deadline.DeadlineUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.delete.DeleteTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.today.TodayUseCase;
+import tw.teddysoft.tasks.usecase.port.in.task.view.ViewTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowUseCase;
 import tw.teddysoft.tasks.usecase.port.out.todolist.show.ShowPresenter;
+import tw.teddysoft.tasks.usecase.port.out.todolist.view.ViewTaskPresenter;
 import tw.teddysoft.tasks.usecase.service.*;
 import tw.teddysoft.tasks.usecase.port.in.project.add.AddProjectUseCase;
 
@@ -38,6 +41,8 @@ public final class ToDoListApp implements Runnable {
     private final DeadlineUseCase deadlineUseCase;
     private final TodayUseCase todayUseCase;
     private final DeleteTaskUseCase deleteTaskUseCase;
+    private final ViewTaskUseCase viewTaskUseCase;
+    private final ViewTaskPresenter viewTaskPresenter;
 
     public static void main(String[] args) {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -54,6 +59,8 @@ public final class ToDoListApp implements Runnable {
         var deadlineUseCase = new DeadlineService(repository);
         var todayUseCase = new TodayService(repository);
         var deleteTaskUseCase = new DeleteTaskService(repository);
+        var viewTaskUseCase = new ViewTaskService(repository);
+        var viewTaskPresenter = new ViewTaskConsolePresenter(out);
 
         new ToDoListApp(
                 in,
@@ -67,7 +74,9 @@ public final class ToDoListApp implements Runnable {
                 errorUseCase,
                 deadlineUseCase,
                 todayUseCase,
-                deleteTaskUseCase
+                deleteTaskUseCase,
+                viewTaskUseCase,
+                viewTaskPresenter
         ).run();
     }
 
@@ -83,7 +92,9 @@ public final class ToDoListApp implements Runnable {
             ErrorUseCase errorUseCase,
             DeadlineUseCase deadlineUseCase,
             TodayUseCase todayUseCase,
-            DeleteTaskUseCase deleteTaskUseCase) {
+            DeleteTaskUseCase deleteTaskUseCase,
+            ViewTaskUseCase viewTaskUseCase,
+            ViewTaskPresenter viewTaskPresenter) {
 
         this.in = reader;
         this.out = writer;
@@ -97,6 +108,9 @@ public final class ToDoListApp implements Runnable {
         this.deadlineUseCase = deadlineUseCase;
         this.todayUseCase = todayUseCase;
         this.deleteTaskUseCase = deleteTaskUseCase;
+        this.viewTaskUseCase = viewTaskUseCase;
+        this.viewTaskPresenter = viewTaskPresenter;
+
     }
 
     public void run() {
@@ -123,7 +137,9 @@ public final class ToDoListApp implements Runnable {
                     errorUseCase,
                     deadlineUseCase,
                     todayUseCase,
-                    deleteTaskUseCase).execute(command);
+                    deleteTaskUseCase,
+                    viewTaskUseCase,
+                    viewTaskPresenter).execute(command);
         }
     }
 }

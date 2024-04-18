@@ -16,10 +16,12 @@ import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.deadline.DeadlineUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.delete.DeleteTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneUseCase;
+import tw.teddysoft.tasks.usecase.port.in.task.view.ViewTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowUseCase;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
+import tw.teddysoft.tasks.usecase.port.out.todolist.view.ViewTaskPresenter;
 import tw.teddysoft.tasks.usecase.service.HelpService;
 import tw.teddysoft.tasks.usecase.port.in.project.add.AddProjectUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.today.TodayUseCase;
@@ -47,6 +49,8 @@ public class SpringBootApplicationTest extends SpringBootTestContextProvider {
     private final DeadlineUseCase deadlineUseCase;
     private final TodayUseCase todayUseCase;
     private final DeleteTaskUseCase deleteTaskUseCase;
+    private final ViewTaskUseCase viewTaskUseCase;
+    private final ViewTaskPresenter viewTaskPresenter;
 
     @Autowired
     public SpringBootApplicationTest(
@@ -59,7 +63,9 @@ public class SpringBootApplicationTest extends SpringBootTestContextProvider {
             ErrorUseCase errorUseCase,
             DeadlineUseCase deadlineUseCase,
             TodayUseCase todayUseCase,
-            DeleteTaskUseCase deleteTaskUseCase){
+            DeleteTaskUseCase deleteTaskUseCase,
+            ViewTaskUseCase viewTaskUseCase,
+            ViewTaskPresenter viewTaskPresenter){
 
         this.showUseCase = showUseCase;
         this.addProjectUseCase = addProjectUseCase;
@@ -69,6 +75,8 @@ public class SpringBootApplicationTest extends SpringBootTestContextProvider {
         this.deadlineUseCase = deadlineUseCase;
         this.todayUseCase = todayUseCase;
         this.deleteTaskUseCase = deleteTaskUseCase;
+        this.viewTaskUseCase = viewTaskUseCase;
+        this.viewTaskPresenter = viewTaskPresenter;
         repository.save(new ToDoList(ToDoListId.of(ToDoListApp.DEFAULT_TO_DO_LIST_ID)));
     }
 
@@ -93,7 +101,9 @@ public class SpringBootApplicationTest extends SpringBootTestContextProvider {
                 errorUseCase,
                 deadlineUseCase,
                 todayUseCase,
-                deleteTaskUseCase);
+                deleteTaskUseCase,
+                viewTaskUseCase,
+                viewTaskPresenter);
         applicationThread = new Thread(toDoListApp);
         applicationThread.start();
     }
@@ -183,6 +193,7 @@ public class SpringBootApplicationTest extends SpringBootTestContextProvider {
                 "  deadline <task ID> <deadline, format: yyyy-mm-dd>",
                 "  add task2 <project name> <task ID> <task description>",
                 "  delete <task ID>",
+                "  view",
                 ""
         );
 

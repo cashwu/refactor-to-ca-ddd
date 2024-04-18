@@ -17,6 +17,7 @@ import tw.teddysoft.tasks.io.springboot.config.UseCaseInjection;
 import tw.teddysoft.tasks.usecase.port.in.task.deadline.DeadlineUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.delete.DeleteTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.today.TodayUseCase;
+import tw.teddysoft.tasks.usecase.port.in.task.view.ViewTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowUseCase;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
@@ -25,6 +26,7 @@ import tw.teddysoft.tasks.usecase.port.in.project.add.AddProjectUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.add.AddTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorUseCase;
+import tw.teddysoft.tasks.usecase.port.out.todolist.view.ViewTaskPresenter;
 
 
 import java.io.BufferedReader;
@@ -53,6 +55,8 @@ public class ToDoListSpringBootApp extends SpringBootServletInitializer implemen
     private final DeadlineUseCase deadlineUseCase;
     private final TodayUseCase todayUseCase;
     private final DeleteTaskUseCase deleteTaskUseCase;
+    private final ViewTaskUseCase viewTaskUseCase;
+    private final ViewTaskPresenter viewTaskPresenter;
 
     @Autowired
     public ToDoListSpringBootApp(
@@ -68,7 +72,9 @@ public class ToDoListSpringBootApp extends SpringBootServletInitializer implemen
             ErrorUseCase errorUseCase,
             DeadlineUseCase deadlineUseCase,
             TodayUseCase todayUseCase,
-            DeleteTaskUseCase deleteTaskUseCase){
+            DeleteTaskUseCase deleteTaskUseCase,
+            ViewTaskUseCase viewTaskUseCase,
+            ViewTaskPresenter viewTaskPresenter){
 
         this.in = in;
         this.out =  out;
@@ -82,6 +88,8 @@ public class ToDoListSpringBootApp extends SpringBootServletInitializer implemen
         this.deadlineUseCase = deadlineUseCase;
         this.todayUseCase = todayUseCase;
         this.deleteTaskUseCase = deleteTaskUseCase;
+        this.viewTaskUseCase = viewTaskUseCase;
+        this.viewTaskPresenter = viewTaskPresenter;
 
         if (repository.findById(ToDoListId.of(TO_DO_LIST_ID)).isEmpty())
             repository.save(new ToDoList(ToDoListId.of(TO_DO_LIST_ID)));
@@ -122,7 +130,9 @@ public class ToDoListSpringBootApp extends SpringBootServletInitializer implemen
                     errorUseCase,
                     deadlineUseCase,
                     todayUseCase,
-                    deleteTaskUseCase).execute(command);
+                    deleteTaskUseCase,
+                    viewTaskUseCase,
+                    viewTaskPresenter).execute(command);
         }
     }
 }

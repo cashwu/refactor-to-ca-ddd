@@ -1,17 +1,17 @@
 package tw.teddysoft.tasks.usecase.service;
 
 import tw.teddysoft.ezddd.core.usecase.ExitCode;
-import tw.teddysoft.tasks.entity.ToDoList;
 import tw.teddysoft.tasks.entity.ToDoListId;
 import tw.teddysoft.tasks.usecase.port.ToDoListMapper;
+import tw.teddysoft.tasks.usecase.port.in.task.today.TodayDto;
 import tw.teddysoft.tasks.usecase.port.in.task.today.TodayInput;
 import tw.teddysoft.tasks.usecase.port.in.task.today.TodayOutput;
 import tw.teddysoft.tasks.usecase.port.in.task.today.TodayUseCase;
-import tw.teddysoft.tasks.usecase.port.out.ProjectPo;
+import tw.teddysoft.tasks.usecase.port.out.TaskPo;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListPo;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class TodayService implements TodayUseCase {
@@ -25,20 +25,19 @@ public class TodayService implements TodayUseCase {
     @Override
     public TodayOutput execute(TodayInput input) {
         ToDoListPo toDoListPo = ToDoListMapper.toPo(repository.findById(ToDoListId.of(input.toDoListId)).get());
-        ToDoListPo resultToDoListPo = new ToDoListPo();
-        resultToDoListPo.setId(toDoListPo.getId());
-        resultToDoListPo.setLastId(toDoListPo.getLastId());
-        List<ProjectPo> projectPos = new ArrayList<>();
-        for(var project : toDoListPo.getProjectPos()){
-            var tasks = project.getTaskPos();
-            tasks.removeIf(t -> (null == t.getDeadline()) || (null == input.today) || !(t.getDeadline().toLocalDate().equals(input.today.toLocalDate())));
-            project.setTaskPos(tasks);
-            projectPos.add(project);
+        if (null == input.today){
+            return TodayOutput.create(TodayOutput.class).fail().setMessage("Input argument 'today' cannot be null.");
         }
-        resultToDoListPo.setProjectPos(projectPos);
 
-        TodayOutput output = new TodayOutput();
-        output.toDoListDto = ToDoListMapper.toDto(ToDoListMapper.toDomain(resultToDoListPo));
-        return output.setExitCode(ExitCode.SUCCESS).setMessage("");
+        List<TodayDto> todayDtos =
+                toDoListPo.getProjectPos()
+                        .stream()
+                        .flatMap(p -> p.getTaskPos().stream().map(task -> new Object[]{p.getName(), task}))
+                        .map(pair -> new TodayDto((String) pair[0], (TaskPo) pair[1]))
+                        .filter(t -> (null != t.getDeadline()) &&  t.getDeadline().toLocalDate().equals(input.today.toLocalDate()))
+                        .sorted(Comparator.comparing(TodayDto::getDeadline, Comparator.nullsLast(Comparator.naturalOrder())))
+                        .toList();
+
+        return TodayOutput.create(TodayOutput.class).setExitCode(ExitCode.SUCCESS).setMessage("").setTodayDtos(todayDtos);
     }
 }

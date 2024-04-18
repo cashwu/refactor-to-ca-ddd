@@ -42,7 +42,7 @@ public class TodayUseCaseTest {
 
         var output = todayUseCase.execute(input);
         assertEquals(ExitCode.SUCCESS, output.getExitCode());
-        assertEquals(2, output.toDoListDto.projectDots.stream().mapToLong(p->p.taskDtos.size()).sum());
+        assertEquals(2, output.todayDtos.size());
     }
 
 }

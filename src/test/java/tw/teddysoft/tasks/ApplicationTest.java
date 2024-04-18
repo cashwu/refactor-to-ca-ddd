@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import tw.teddysoft.tasks.adapter.out.presenter.HelpConsolePresenter;
 import tw.teddysoft.tasks.adapter.out.presenter.ShowConsolePresenter;
+import tw.teddysoft.tasks.adapter.out.presenter.ViewTaskConsolePresenter;
 import tw.teddysoft.tasks.adapter.out.repository.ToDoListInMemoryRepository;
 import tw.teddysoft.tasks.adapter.out.repository.ToDoListInMemoryRepositoryPeer;
 import tw.teddysoft.tasks.entity.ToDoList;
@@ -49,6 +50,8 @@ public final class ApplicationTest {
         var deadlineUseCase = new DeadlineService(repository);
         var todayUseCase = new TodayService(repository);
         var deleteTaskUseCase = new DeleteTaskService(repository);
+        var viewTaskUseCase = new ViewTaskService(repository);
+        var viewTaskPresenter = new ViewTaskConsolePresenter(out);
 
         ToDoListApp toDoListApp = new ToDoListApp(
                 in,
@@ -62,7 +65,9 @@ public final class ApplicationTest {
                 errorUseCase,
                 deadlineUseCase,
                 todayUseCase,
-                deleteTaskUseCase);
+                deleteTaskUseCase,
+                viewTaskUseCase,
+                viewTaskPresenter);
         applicationThread = new Thread(toDoListApp);
     }
 
@@ -157,6 +162,7 @@ public final class ApplicationTest {
                 "  deadline <task ID> <deadline, format: yyyy-mm-dd>",
                 "  add task2 <project name> <task ID> <task description>",
                 "  delete <task ID>",
+                "  view",
                 ""
         );
 

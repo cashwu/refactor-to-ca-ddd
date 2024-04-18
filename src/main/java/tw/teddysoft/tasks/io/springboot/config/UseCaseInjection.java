@@ -8,6 +8,7 @@ import tw.teddysoft.tasks.adapter.in.controller.web.HelpWebPresenter;
 import tw.teddysoft.tasks.adapter.out.presenter.ShowConsolePresenter;
 import tw.teddysoft.tasks.usecase.port.in.task.deadline.DeadlineUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.today.TodayUseCase;
+import tw.teddysoft.tasks.usecase.port.in.task.view.ViewTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
 import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowUseCase;
@@ -19,6 +20,8 @@ import tw.teddysoft.tasks.usecase.port.in.task.delete.DeleteTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorUseCase;
 import tw.teddysoft.tasks.usecase.service.*;
 import tw.teddysoft.tasks.adapter.out.presenter.HelpConsolePresenter;
+import tw.teddysoft.tasks.usecase.port.out.todolist.view.ViewTaskPresenter;
+import tw.teddysoft.tasks.adapter.out.presenter.ViewTaskConsolePresenter;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -92,5 +95,15 @@ public class UseCaseInjection {
     @Bean
     public DeleteTaskUseCase deleteTaskUseCase() {
         return new DeleteTaskService(toDoListRepository);
+    }
+
+    @Bean
+    public ViewTaskUseCase viewTaskUseCase() {
+        return new ViewTaskService(toDoListRepository);
+    }
+
+    @Bean
+    public ViewTaskPresenter viewTaskPresenter() {
+        return new ViewTaskConsolePresenter(getOut());
     }
 }

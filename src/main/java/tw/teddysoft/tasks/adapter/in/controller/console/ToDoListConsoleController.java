@@ -6,6 +6,10 @@ import tw.teddysoft.tasks.usecase.port.in.task.deadline.DeadlineUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.delete.DeleteTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.today.TodayInput;
 import tw.teddysoft.tasks.usecase.port.in.task.today.TodayOutput;
+import tw.teddysoft.tasks.usecase.port.in.task.view.ViewTaskDto;
+import tw.teddysoft.tasks.usecase.port.in.task.view.ViewTaskInput;
+import tw.teddysoft.tasks.usecase.port.in.task.view.ViewTaskUseCase;
+import tw.teddysoft.tasks.usecase.port.in.task.view.ViewTaskOutput;
 import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorInput;
 import tw.teddysoft.tasks.usecase.port.in.todolist.error.ErrorUseCase;
 import tw.teddysoft.tasks.usecase.port.in.todolist.help.HelpUseCase;
@@ -22,6 +26,8 @@ import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.setdone.SetDoneInput;
 import tw.teddysoft.tasks.usecase.port.in.task.today.TodayUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.delete.DeleteTaskInput;
+import tw.teddysoft.tasks.usecase.port.out.todolist.view.ViewTaskPresenter;
+
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -39,6 +45,8 @@ public class ToDoListConsoleController {
     private final DeadlineUseCase deadlineUseCase;
     private final TodayUseCase todayUseCase;
     private final DeleteTaskUseCase deleteTaskUseCase;
+    private final ViewTaskUseCase viewTaskUseCase;
+    private final ViewTaskPresenter viewTaskPresenter;
 
     public ToDoListConsoleController(
             PrintWriter out,
@@ -51,7 +59,9 @@ public class ToDoListConsoleController {
             ErrorUseCase errorUseCase,
             DeadlineUseCase deadlineUseCase,
             TodayUseCase todayUseCase,
-            DeleteTaskUseCase deleteTaskUseCase) {
+            DeleteTaskUseCase deleteTaskUseCase,
+            ViewTaskUseCase viewTaskUseCase,
+            ViewTaskPresenter viewTaskPresenter) {
 
         this.out = out;
         this.showUseCase = showUseCase;
@@ -64,6 +74,8 @@ public class ToDoListConsoleController {
         this.deadlineUseCase = deadlineUseCase;
         this.todayUseCase = todayUseCase;
         this.deleteTaskUseCase = deleteTaskUseCase;
+        this.viewTaskUseCase = viewTaskUseCase;
+        this.viewTaskPresenter = viewTaskPresenter;
     }
 
     public void execute(String commandLine) {
@@ -103,7 +115,7 @@ public class ToDoListConsoleController {
                 todayInput.toDoListId = ToDoListApp.DEFAULT_TO_DO_LIST_ID;
                 todayInput.today = LocalDateTime.now();
                 TodayOutput todayOutput = todayUseCase.execute(todayInput);
-                showPresenter.present(todayOutput.toDoListDto);
+                viewTaskPresenter.present(todayOutput.todayDtos.stream().map(x -> (ViewTaskDto) x).toList());
                 break;
             case "delete":
                 String taskId = commandRest[1].split(" ", 2)[0];
@@ -111,6 +123,13 @@ public class ToDoListConsoleController {
                 deleteTaskInput.toDoListId = ToDoListApp.DEFAULT_TO_DO_LIST_ID;
                 deleteTaskInput.taskId = taskId;
                 out.println(deleteTaskUseCase.execute(deleteTaskInput).getMessage());
+                break;
+            case "view":
+                ViewTaskInput viewTaskInput = new ViewTaskInput();
+                viewTaskInput.toDoListId = ToDoListApp.DEFAULT_TO_DO_LIST_ID;
+                viewTaskInput.orderBy = ViewTaskInput.BY_DEADLINE;
+                ViewTaskOutput viewTaskOutput = viewTaskUseCase.execute(viewTaskInput);
+                viewTaskPresenter.present(viewTaskOutput.viewTaskDtos);
                 break;
             default:
                 ErrorInput errorInput = new ErrorInput();
