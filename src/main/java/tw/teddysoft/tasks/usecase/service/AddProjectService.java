@@ -24,7 +24,7 @@ public class AddProjectService implements AddProjectUseCase {
 
         ToDoList toDoList = repository.findById(ToDoListId.of(input.toDoListId)).get();
         if (toDoList.containsProject(ProjectName.of(input.projectName))){
-            return CqrsOutput.create().fail().setMessage(format("Duplicated project name '%s'\n", input.projectName));
+            return CqrsOutput.create().fail().setMessage(format("Duplicated project name '%s'%n", input.projectName));
         }
 
         toDoList.addProject(ProjectName.of(input.projectName));

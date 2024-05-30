@@ -20,7 +20,7 @@ public class ViewTaskConsolePresenter implements ViewTaskPresenter {
         for (ViewTaskDto viewTaskDto : viewTaskDtos) {
             out.printf("%s  [%c] %s: %s  %s%n", viewTaskDto.projectName, (viewTaskDto.done? 'x' : ' '), viewTaskDto.taskId, viewTaskDto.description, viewTaskDto.deadline);
         }
-        out.println();
+        out.printf("%n");
         out.flush();
     }
 }

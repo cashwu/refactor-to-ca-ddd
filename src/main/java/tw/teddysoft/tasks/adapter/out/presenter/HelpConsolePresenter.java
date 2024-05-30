@@ -18,6 +18,6 @@ public class HelpConsolePresenter implements HelpPresenter {
         out.println(helpDto.heading);
         for(var command : helpDto.commands)
             out.printf("  %s%n", command);
-        out.println();
+        out.printf("%n");
     }
 }

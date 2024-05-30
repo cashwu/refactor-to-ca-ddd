@@ -52,8 +52,8 @@ public class AddTaskService implements AddTaskUseCase {
 
     private CqrsOutput projectNotFoundError(String projectName){
         StringBuilder out = new StringBuilder();
-        out.append(format("Could not find a project with the name \"%s\".", projectName));
-        out.append("\n");
+        out.append(format("Could not find a project with the name \"%s\".%n", projectName));
+//        out.append("\n");
         return CqrsOutput.create().fail().setMessage(out.toString());
     }
 
@@ -64,38 +64,7 @@ public class AddTaskService implements AddTaskUseCase {
 
     private CqrsOutput duplicatedTaskIdError(String taskId){
         StringBuilder out = new StringBuilder();
-        out.append(format("Duplicated task id '%s'.", taskId));
-        out.append("\n");
+        out.append(format("Duplicated task id '%s'.%n", taskId));
         return CqrsOutput.create().fail().setMessage(out.toString());
     }
-
-//    @Override
-//    public CqrsOutput execute(AddTaskInput input) throws UseCaseFailureException {
-//        ToDoList toDoList = repository.findById(ToDoListId.of(input.toDoListId)).get();
-//        if (toDoList.getProject(ProjectName.of(input.projectName)).isEmpty()){
-//            StringBuilder out = new StringBuilder();
-//            out.append(format("Could not find a project with the name \"%s\".", input.projectName));
-//            out.append("\n");
-//            return CqrsOutput.create().setExitCode(ExitCode.FAILURE).setMessage(out.toString());
-//        }
-//
-//        String taskId;
-//        if (null == input.taskId){
-//            toDoList.addTask(
-//                    ProjectName.of(input.projectName),
-//                    input.description,
-//                    input.done);
-//            taskId = String.valueOf(toDoList.getTaskLastId());
-//        }else {
-//            toDoList.addTask(
-//                    ProjectName.of(input.projectName),
-//                    TaskId.of(input.taskId),
-//                    input.description,
-//                    input.done);
-//            taskId = input.taskId;
-//        }
-//
-//        repository.save(toDoList);
-//        return CqrsOutput.create().setExitCode(ExitCode.SUCCESS).setMessage("").setId(taskId);
-//    }
 }

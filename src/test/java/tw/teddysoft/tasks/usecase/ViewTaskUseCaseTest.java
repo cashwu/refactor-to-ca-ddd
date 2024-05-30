@@ -8,6 +8,7 @@ import tw.teddysoft.tasks.adapter.out.repository.ToDoListInMemoryRepositoryPeer;
 import tw.teddysoft.tasks.entity.ToDoList;
 import tw.teddysoft.tasks.entity.ToDoListId;
 import tw.teddysoft.tasks.io.standard.ToDoListApp;
+import tw.teddysoft.tasks.usecase.port.in.todolist.show.ShowOutput;
 import tw.teddysoft.tasks.usecase.port.out.ToDoListRepository;
 import tw.teddysoft.tasks.usecase.port.in.task.view.ViewTaskUseCase;
 import tw.teddysoft.tasks.usecase.port.in.task.view.ViewTaskInput;
@@ -77,7 +78,13 @@ public class ViewTaskUseCaseTest {
                 p2  [ ] 4: Study DDD  2024-08-08T12:00
                 p3  [ ] 6: Study DDD  null
                 """;
-        assertEquals(normalizeNewlines(expectedOutput), normalizeNewlines(read(expectedOutput.length())));
+
+        if (System.getProperty("os.name").startsWith("Windows")){
+            assertEquals(normalizeNewlines(expectedOutput), normalizeNewlines(read(lineCount(expectedOutput) + expectedOutput.length())));
+        }
+        else{
+            assertEquals(normalizeNewlines(expectedOutput), normalizeNewlines(read(expectedOutput.length())));
+        }
 
     }
 
@@ -86,5 +93,11 @@ public class ViewTaskUseCaseTest {
         outReader.read(buffer);
         return String.valueOf(buffer);
     }
+
+    private int lineCount(String str){
+        String [] lines = str.split("\r\n|\r|\n");
+        return lines.length;
+    }
+
 }
 

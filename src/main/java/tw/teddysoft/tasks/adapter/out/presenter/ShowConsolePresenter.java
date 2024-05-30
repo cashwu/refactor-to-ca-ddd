@@ -25,7 +25,7 @@ public class ShowConsolePresenter implements ShowPresenter {
                 else
                     out.printf("    [%c] %s: %s%n", (task.done? 'x' : ' '), task.id, task.description);
             }
-            out.println();
+            out.printf("%n");
             out.flush();
         }
     }

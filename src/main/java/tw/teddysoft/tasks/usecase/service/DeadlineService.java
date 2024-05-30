@@ -26,8 +26,7 @@ public class DeadlineService implements DeadlineUseCase {
 
         if (!toDoList.containTask(taskId)){
             StringBuilder out = new StringBuilder();
-            out.append(format("Could not find a task with an ID of %s.", taskId.value()));
-            out.append("\n");
+            out.append(format("Could not find a task with an ID of %s.%n", taskId.value()));
             return CqrsOutput.create().setExitCode(ExitCode.FAILURE).setMessage(out.toString());
         }
 

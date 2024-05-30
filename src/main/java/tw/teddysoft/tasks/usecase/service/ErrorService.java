@@ -11,8 +11,7 @@ public class ErrorService implements ErrorUseCase {
     @Override
     public CqrsOutput execute(ErrorInput input) {
         StringBuilder sb = new StringBuilder();
-        sb.append(format("I don't know what the command \"%s\" is.", input.command));
-        sb.append("\n");
+        sb.append(format("I don't know what the command \"%s\" is.%n", input.command));
         return  CqrsOutput.create().fail().setMessage(sb.toString());
     }
 }
