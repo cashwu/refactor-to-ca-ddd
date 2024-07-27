@@ -1,5 +1,8 @@
 package tw.teddysoft.tasks;
 
+import tw.teddysoft.tasks.entity.Task;
+import tw.teddysoft.tasks.entity.Tasks;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,7 +15,8 @@ import java.util.Map;
 public final class TaskList implements Runnable {
     private static final String QUIT = "quit";
 
-    private final Map<String, List<Task>> tasks = new LinkedHashMap<>();
+    private final Tasks tasks = new Tasks();
+
     private final BufferedReader in;
     private final PrintWriter out;
 
