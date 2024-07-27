@@ -5,6 +5,8 @@ import java.util.*;
 public class ToDoList {
     private final List<Project> project = new ArrayList<>();
 
+    private long lastId = 0;
+
     public ToDoList() {
     }
 
@@ -22,5 +24,9 @@ public class ToDoList {
                 .map(Project::getTasks)
                 .orElse(null);
 
+    }
+
+    public TaskId nextId() {
+        return TaskId.of(++lastId);
     }
 }

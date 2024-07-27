@@ -1,17 +1,21 @@
 package tw.teddysoft.tasks.entities;
 
-public final class Task {
-    private final long id;
+import tw.teddysoft.ezddd.core.entity.Entity;
+
+public final class Task implements Entity<TaskId> {
+
+    private final TaskId id;
     private final String description;
     private boolean done;
 
-    public Task(long id, String description, boolean done) {
+    public Task(TaskId id, String description, boolean done) {
         this.id = id;
         this.description = description;
         this.done = done;
     }
 
-    public long getId() {
+    @Override
+    public TaskId getId() {
         return id;
     }
 

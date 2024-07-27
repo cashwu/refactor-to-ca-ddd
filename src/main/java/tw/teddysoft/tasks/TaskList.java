@@ -1,9 +1,6 @@
 package tw.teddysoft.tasks;
 
-import tw.teddysoft.tasks.entities.Project;
-import tw.teddysoft.tasks.entities.ProjectName;
-import tw.teddysoft.tasks.entities.Task;
-import tw.teddysoft.tasks.entities.ToDoList;
+import tw.teddysoft.tasks.entities.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,7 +16,7 @@ public final class TaskList implements Runnable {
     private final PrintWriter out;
     private final ToDoList tasks = new ToDoList();
 
-    private long lastId = 0;
+//    public long lastId = 0;
 
     public TaskList(BufferedReader reader, PrintWriter writer) {
         this.in = reader;
@@ -78,7 +75,7 @@ public final class TaskList implements Runnable {
         for (Project project : tasks.getProject()) {
             out.println(project.getName());
             for (Task task : project.getTasks()) {
-                out.printf("    [%c] %d: %s%n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription());
+                out.printf("    [%c] %s: %s%n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription());
             }
             out.println();
         }
@@ -106,7 +103,7 @@ public final class TaskList implements Runnable {
             out.println();
             return;
         }
-        projectTasks.add(new Task(nextId(), description, false));
+        projectTasks.add(new Task(tasks.nextId(), description, false));
     }
 
     private void check(String idString) {
@@ -118,16 +115,18 @@ public final class TaskList implements Runnable {
     }
 
     private void setDone(String idString, boolean done) {
-        int id = Integer.parseInt(idString);
+//        int id = Integer.parseInt(idString);
+        TaskId id = TaskId.of(idString);
+
         for (Project project : tasks.getProject()) {
             for (Task task : project.getTasks()) {
-                if (task.getId() == id) {
+                if (task.getId().equals(id)) {
                     task.setDone(done);
                     return;
                 }
             }
         }
-        out.printf("Could not find a task with an ID of %d.", id);
+        out.printf("Could not find a task with an ID of %s.", id);
         out.println();
     }
 
@@ -146,7 +145,4 @@ public final class TaskList implements Runnable {
         out.println();
     }
 
-    private long nextId() {
-        return ++lastId;
-    }
 }
