@@ -15,7 +15,7 @@ public final class TaskList implements Runnable {
     private final BufferedReader in;
     private final PrintWriter out;
     private ToDoListId DEFAULT_TODO_LIST_ID = ToDoListId.of(123);
-    private final ToDoList tasks = new ToDoList(DEFAULT_TODO_LIST_ID);
+    private final ToDoList toDoList = new ToDoList(DEFAULT_TODO_LIST_ID);
 
     public TaskList(BufferedReader reader, PrintWriter writer) {
         this.in = reader;
@@ -71,7 +71,7 @@ public final class TaskList implements Runnable {
     }
 
     private void show() {
-        for (Project project : tasks.getProject()) {
+        for (Project project : toDoList.getProject()) {
             out.println(project.getName());
             for (Task task : project.getTasks()) {
                 out.printf("    [%c] %s: %s%n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription());
@@ -92,17 +92,17 @@ public final class TaskList implements Runnable {
     }
 
     private void addProject(ProjectName name) {
-        tasks.addProject(name, new ArrayList<Task>());
+        toDoList.addProject(name, new ArrayList<Task>());
     }
 
     private void addTask(ProjectName project, String description) {
-        List<Task> projectTasks = tasks.getTasks(project);
+        List<Task> projectTasks = toDoList.getTasks(project);
         if (projectTasks == null) {
             out.printf("Could not find a project with the name \"%s\".", project);
             out.println();
             return;
         }
-        projectTasks.add(new Task(tasks.nextId(), description, false));
+        projectTasks.add(new Task(toDoList.nextId(), description, false));
     }
 
     private void check(String idString) {
@@ -117,10 +117,11 @@ public final class TaskList implements Runnable {
 //        int id = Integer.parseInt(idString);
         TaskId id = TaskId.of(idString);
 
-        for (Project project : tasks.getProject()) {
+        for (Project project : toDoList.getProject()) {
             for (Task task : project.getTasks()) {
                 if (task.getId().equals(id)) {
-                    task.setDone(done);
+//                    task.setDone(done);
+                    toDoList.setDone(task.getId(), done);
                     return;
                 }
             }

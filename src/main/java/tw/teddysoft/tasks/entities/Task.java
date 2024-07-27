@@ -2,7 +2,7 @@ package tw.teddysoft.tasks.entities;
 
 import tw.teddysoft.ezddd.core.entity.Entity;
 
-public final class Task implements Entity<TaskId> {
+public class Task implements Entity<TaskId> {
 
     private final TaskId id;
     private final String description;
