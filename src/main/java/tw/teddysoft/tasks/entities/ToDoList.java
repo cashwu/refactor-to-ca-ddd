@@ -45,4 +45,17 @@ public class ToDoList extends AggregateRoot<ToDoListId, DomainEvent> {
                 .findFirst()
                 .ifPresent(a -> a.setTaskDone(taskId, done));
     }
+
+//    public boolean setTaskDone(TaskId id, boolean done) {
+//        for (Project project : this.project) {
+//            for (Task task : project.getTasks()) {
+//                if (task.getId().equals(id)) {
+//                    task.setDone(done);
+////                    toDoList.setDone(task.getId(), done);
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+//    }
 }
