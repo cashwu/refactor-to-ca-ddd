@@ -1,9 +1,6 @@
 package tw.teddysoft.tasks;
 
-import tw.teddysoft.tasks.entity.Project;
-import tw.teddysoft.tasks.entity.ProjectName;
-import tw.teddysoft.tasks.entity.Task;
-import tw.teddysoft.tasks.entity.TodoList;
+import tw.teddysoft.tasks.entity.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,21 +12,21 @@ import java.util.List;
 public final class TaskList implements Runnable {
     private static final String QUIT = "quit";
 
-    private final TodoList tasks = new TodoList();
+    private final TodoList todoList = new TodoList();
     private final BufferedReader in;
     private final PrintWriter out;
 
     private long lastId = 0;
 
+    public TaskList(BufferedReader reader, PrintWriter writer) {
+        this.in = reader;
+        this.out = writer;
+    }
+
     public static void main(String[] args) throws Exception {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         PrintWriter out = new PrintWriter(System.out);
         new TaskList(in, out).run();
-    }
-
-    public TaskList(BufferedReader reader, PrintWriter writer) {
-        this.in = reader;
-        this.out = writer;
     }
 
     public void run() {
@@ -75,10 +72,10 @@ public final class TaskList implements Runnable {
     }
 
     private void show() {
-        for (Project project : tasks.getProjects()) {
+        for (Project project : todoList.getProjects()) {
             out.println(project.getName());
             for (Task task : project.getTasks()) {
-                out.printf("    [%c] %d: %s%n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription());
+                out.printf("    [%c] %s: %s%n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription());
             }
             out.println();
         }
@@ -96,17 +93,17 @@ public final class TaskList implements Runnable {
     }
 
     private void addProject(ProjectName name) {
-        tasks.addProject(name, new ArrayList<>());
+        todoList.addProject(name, new ArrayList<>());
     }
 
     private void addTask(ProjectName project, String description) {
-        List<Task> projectTasks = tasks.getProject(project);
+        List<Task> projectTasks = todoList.getProject(project);
         if (projectTasks == null) {
             out.printf("Could not find a project with the name \"%s\".", project);
             out.println();
             return;
         }
-        projectTasks.add(new Task(nextId(), description, false));
+        projectTasks.add(new Task(todoList.nextId(), description, false));
     }
 
     private void check(String idString) {
@@ -118,16 +115,17 @@ public final class TaskList implements Runnable {
     }
 
     private void setDone(String idString, boolean done) {
-        int id = Integer.parseInt(idString);
-        for (Project project : tasks.getProjects()) {
+//        int id = Integer.parseInt(idString);
+        TaskId id = TaskId.of(idString);
+        for (Project project : todoList.getProjects()) {
             for (Task task : project.getTasks()) {
-                if (task.getId() == id) {
+                if (task.getId().equals(id)) {
                     task.setDone(done);
                     return;
                 }
             }
         }
-        out.printf("Could not find a task with an ID of %d.", id);
+        out.printf("Could not find a task with an ID of %s.", id);
         out.println();
     }
 

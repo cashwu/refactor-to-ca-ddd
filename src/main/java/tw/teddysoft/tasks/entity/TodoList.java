@@ -4,6 +4,8 @@ import java.util.*;
 
 public class TodoList {
 
+    private long lastId = 0;
+
     private final List<Project> projects = new ArrayList<>();
 
     public List<Project> getProjects() {
@@ -21,5 +23,9 @@ public class TodoList {
                 .findFirst()
                 .map(a -> a.getTasks())
                 .orElse(null);
+    }
+
+    public TaskId nextId() {
+        return TaskId.of(++lastId);
     }
 }
