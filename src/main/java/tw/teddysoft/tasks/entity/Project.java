@@ -1,9 +1,11 @@
 package tw.teddysoft.tasks.entity;
 
+import tw.teddysoft.ezddd.core.entity.Entity;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Project {
+public class Project implements Entity<ProjectName> {
 
     private ProjectName name;
     private List<Task> tasks;
@@ -24,5 +26,10 @@ public class Project {
 
     public List<Task> getTasks() {
         return tasks;
+    }
+
+    @Override
+    public ProjectName getId() {
+        return name;
     }
 }
