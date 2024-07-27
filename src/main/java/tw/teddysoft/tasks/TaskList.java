@@ -16,7 +16,7 @@ import java.util.Map;
 public final class TaskList implements Runnable {
     private static final String QUIT = "quit";
 
-    private final Map<ProjectName, List<Task>> tasks = new LinkedHashMap<>();
+    private final Tasks tasks = new Tasks();
     private final BufferedReader in;
     private final PrintWriter out;
 
