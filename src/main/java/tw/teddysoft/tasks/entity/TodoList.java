@@ -17,7 +17,8 @@ public class TodoList extends AggregateRoot<TodoListId, DomainEvent> {
     private final List<Project> projects = new ArrayList<>();
 
     public List<Project> getProjects() {
-        return projects;
+        return projects.stream().map(a -> (Project)new ReadOnlyProject(a))
+                .toList();
     }
 
     public void addProject(ProjectName name, ArrayList<Task> tasks) {
@@ -40,5 +41,11 @@ public class TodoList extends AggregateRoot<TodoListId, DomainEvent> {
     @Override
     public TodoListId getId() {
         return todoListId;
+    }
+
+    public void setDone(TaskId id, boolean done) {
+        this.projects.stream().filter(a -> a.containTask(id))
+                .findFirst()
+                .ifPresent(a -> a.setTaskDone(id, done));
     }
 }
