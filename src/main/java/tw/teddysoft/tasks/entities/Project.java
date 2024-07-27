@@ -1,11 +1,10 @@
 package tw.teddysoft.tasks.entities;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import tw.teddysoft.ezddd.core.entity.Entity;
 
-public class Project {
+import java.util.ArrayList;
+
+public class Project implements Entity<ProjectName> {
     private final ProjectName name;
     private final ArrayList<Task> tasks;
 
@@ -20,5 +19,10 @@ public class Project {
 
     public ArrayList<Task> getTasks() {
         return tasks;
+    }
+
+    @Override
+    public ProjectName getId() {
+        return this.name;
     }
 }

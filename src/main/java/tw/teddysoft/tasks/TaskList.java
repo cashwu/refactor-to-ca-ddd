@@ -14,9 +14,8 @@ public final class TaskList implements Runnable {
 
     private final BufferedReader in;
     private final PrintWriter out;
-    private final ToDoList tasks = new ToDoList();
-
-//    public long lastId = 0;
+    private ToDoListId DEFAULT_TODO_LIST_ID = ToDoListId.of(123);
+    private final ToDoList tasks = new ToDoList(DEFAULT_TODO_LIST_ID);
 
     public TaskList(BufferedReader reader, PrintWriter writer) {
         this.in = reader;
@@ -144,5 +143,4 @@ public final class TaskList implements Runnable {
         out.printf("I don't know what the command \"%s\" is.", command);
         out.println();
     }
-
 }
