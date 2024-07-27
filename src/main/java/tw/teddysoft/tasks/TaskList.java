@@ -121,7 +121,8 @@ public final class TaskList implements Runnable {
         for (Project project : todoList.getProject()) {
             for (Task task : project.getTasks()) {
                 if (task.getId().equals(id)) {
-                    task.setDone(done);
+                    //task.setDone(done);
+                    todoList.setDone(task.getId(), done);
                     return;
                 }
             }

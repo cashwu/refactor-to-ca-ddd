@@ -14,7 +14,7 @@ public class Project implements Entity<ProjectName> {
         tasks = new ArrayList<>();
     }
 
-    public Project(ProjectName name, ArrayList<Task> tasks) {
+    public Project(ProjectName name, List<Task> tasks) {
         this();
         this.name = name;
         this.tasks.addAll(tasks);
@@ -31,5 +31,16 @@ public class Project implements Entity<ProjectName> {
     @Override
     public ProjectName getId() {
         return name;
+    }
+
+    public boolean containTask(TaskId taskId) {
+        return tasks.stream().anyMatch(task -> task.getId().equals(taskId));
+    }
+
+    public void setTaskDone(TaskId taskId, boolean done) {
+        tasks.stream().filter(task -> task.getId().equals(taskId))
+                .findFirst()
+                .ifPresent(task -> task.setDone(done));
+
     }
 }
