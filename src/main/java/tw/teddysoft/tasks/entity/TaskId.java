@@ -1,6 +1,8 @@
 package tw.teddysoft.tasks.entity;
 
-public record TaskId(String value) {
+import tw.teddysoft.ezddd.core.entity.ValueObject;
+
+public record TaskId(String value) implements ValueObject {
 
     public static TaskId of(long id) {
         return new TaskId(String.valueOf(id));

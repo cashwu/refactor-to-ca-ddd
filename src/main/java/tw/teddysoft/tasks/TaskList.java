@@ -12,7 +12,8 @@ import java.util.List;
 public final class TaskList implements Runnable {
     private static final String QUIT = "quit";
 
-    private final TodoList todoList = new TodoList();
+    private TodoListId DEFAULT_TODO_LIST_ID = TodoListId.of("123");
+    private final TodoList todoList = new TodoList(DEFAULT_TODO_LIST_ID);
     private final BufferedReader in;
     private final PrintWriter out;
 

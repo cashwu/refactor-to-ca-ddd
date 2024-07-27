@@ -1,10 +1,18 @@
 package tw.teddysoft.tasks.entity;
 
+import tw.teddysoft.ezddd.core.entity.AggregateRoot;
+import tw.teddysoft.ezddd.core.entity.DomainEvent;
+
 import java.util.*;
 
-public class TodoList {
+public class TodoList extends AggregateRoot<TodoListId, DomainEvent> {
 
+    private TodoListId todoListId;
     private long lastId = 0;
+
+    public TodoList(TodoListId todoListId) {
+        this.todoListId = todoListId;
+    }
 
     private final List<Project> projects = new ArrayList<>();
 
@@ -27,5 +35,10 @@ public class TodoList {
 
     public TaskId nextId() {
         return TaskId.of(++lastId);
+    }
+
+    @Override
+    public TodoListId getId() {
+        return todoListId;
     }
 }
