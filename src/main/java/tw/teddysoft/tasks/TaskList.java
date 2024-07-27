@@ -3,21 +3,19 @@ package tw.teddysoft.tasks;
 import tw.teddysoft.tasks.entity.Project;
 import tw.teddysoft.tasks.entity.ProjectName;
 import tw.teddysoft.tasks.entity.Task;
-import tw.teddysoft.tasks.entity.Tasks;
+import tw.teddysoft.tasks.entity.TodoList;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public final class TaskList implements Runnable {
     private static final String QUIT = "quit";
 
-    private final Tasks tasks = new Tasks();
+    private final TodoList tasks = new TodoList();
     private final BufferedReader in;
     private final PrintWriter out;
 
@@ -77,7 +75,7 @@ public final class TaskList implements Runnable {
     }
 
     private void show() {
-        for (Project project : tasks.entrySet()) {
+        for (Project project : tasks.getProjects()) {
             out.println(project.getName());
             for (Task task : project.getTasks()) {
                 out.printf("    [%c] %d: %s%n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription());
@@ -98,11 +96,11 @@ public final class TaskList implements Runnable {
     }
 
     private void addProject(ProjectName name) {
-        tasks.put(name, new ArrayList<>());
+        tasks.addProject(name, new ArrayList<>());
     }
 
     private void addTask(ProjectName project, String description) {
-        List<Task> projectTasks = tasks.get(project);
+        List<Task> projectTasks = tasks.getProject(project);
         if (projectTasks == null) {
             out.printf("Could not find a project with the name \"%s\".", project);
             out.println();
@@ -121,7 +119,7 @@ public final class TaskList implements Runnable {
 
     private void setDone(String idString, boolean done) {
         int id = Integer.parseInt(idString);
-        for (Project project : tasks.entrySet()) {
+        for (Project project : tasks.getProjects()) {
             for (Task task : project.getTasks()) {
                 if (task.getId() == id) {
                     task.setDone(done);
