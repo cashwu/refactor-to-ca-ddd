@@ -75,7 +75,7 @@ public final class TaskList implements Runnable {
     }
 
     private void show() {
-        for (Project project : tasks.entrySet()) {
+        for (Project project : tasks.getProject()) {
             out.println(project.getName());
             for (Task task : project.getTasks()) {
                 out.printf("    [%c] %d: %s%n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription());
@@ -96,11 +96,11 @@ public final class TaskList implements Runnable {
     }
 
     private void addProject(ProjectName name) {
-        tasks.put(name, new ArrayList<Task>());
+        tasks.addProject(name, new ArrayList<Task>());
     }
 
     private void addTask(ProjectName project, String description) {
-        List<Task> projectTasks = tasks.get(project);
+        List<Task> projectTasks = tasks.getTasks(project);
         if (projectTasks == null) {
             out.printf("Could not find a project with the name \"%s\".", project);
             out.println();
@@ -119,7 +119,7 @@ public final class TaskList implements Runnable {
 
     private void setDone(String idString, boolean done) {
         int id = Integer.parseInt(idString);
-        for (Project project : tasks.entrySet()) {
+        for (Project project : tasks.getProject()) {
             for (Task task : project.getTasks()) {
                 if (task.getId() == id) {
                     task.setDone(done);

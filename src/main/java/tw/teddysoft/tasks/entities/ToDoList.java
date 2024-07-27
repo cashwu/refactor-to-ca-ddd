@@ -8,15 +8,15 @@ public class ToDoList {
     public ToDoList() {
     }
 
-    public List<Project> entrySet() {
+    public List<Project> getProject() {
         return project;
     }
 
-    public void put(ProjectName name, ArrayList<Task> tasks) {
+    public void addProject(ProjectName name, ArrayList<Task> tasks) {
         this.project.add(new Project(name, tasks));
     }
 
-    public List<Task> get(ProjectName projectName) {
+    public List<Task> getTasks(ProjectName projectName) {
         return this.project.stream().filter(a -> a.getName().equals(projectName))
                 .findFirst()
                 .map(Project::getTasks)
