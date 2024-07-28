@@ -2,8 +2,8 @@ package tw.teddysoft.tasks;
 
 import tw.teddysoft.tasks.entity.*;
 import tw.teddysoft.tasks.usecase.Execute;
-import tw.teddysoft.tasks.usecase.InMemoryTodoListRepository;
-import tw.teddysoft.tasks.usecase.TodoListRepository;
+import tw.teddysoft.tasks.adapter.repository.InMemoryTodoListRepository;
+import tw.teddysoft.tasks.usecase.port.out.TodoListRepository;
 
 import java.io.BufferedReader;
 import java.io.IOException;

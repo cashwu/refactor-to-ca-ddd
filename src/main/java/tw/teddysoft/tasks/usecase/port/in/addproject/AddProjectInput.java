@@ -1,7 +1,6 @@
-package tw.teddysoft.tasks.usecase;
+package tw.teddysoft.tasks.usecase.port.in.addproject;
 
 import tw.teddysoft.ezddd.core.usecase.Input;
-import tw.teddysoft.tasks.entity.ProjectName;
 
 public class AddProjectInput implements Input {
 
