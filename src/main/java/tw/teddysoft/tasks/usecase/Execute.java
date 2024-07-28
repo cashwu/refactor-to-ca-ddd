@@ -8,10 +8,12 @@ public class Execute {
     private String commandLine;
     private TodoList todoList;
     private PrintWriter out;
+    private TodoListRepository todoListRepository;
 
-    public Execute(TodoList todoList, PrintWriter out) {
+    public Execute(TodoList todoList, PrintWriter out, TodoListRepository todoListRepository) {
         this.todoList = todoList;
         this.out = out;
+        this.todoListRepository = todoListRepository;
     }
 
     public void execute(String commandLine) {
@@ -25,7 +27,7 @@ public class Execute {
                 new Show(todoList, out).show();
                 break;
             case "add":
-                new Add(todoList, out).add(commandRest[1]);
+                new Add(todoList, out, todoListRepository).add(commandRest[1]);
                 break;
             case "check":
                 new SetDone(todoList, out).setDone(commandRest[1], true);

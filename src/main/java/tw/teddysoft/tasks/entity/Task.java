@@ -3,7 +3,7 @@ package tw.teddysoft.tasks.entity;
 import tw.teddysoft.ezddd.core.entity.Entity;
 
 public class Task implements Entity<TaskId> {
-//    private final long id;
+//    private final long value;
     private final TaskId id;
     
     private final String description;

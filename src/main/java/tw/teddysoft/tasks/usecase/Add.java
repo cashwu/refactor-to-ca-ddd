@@ -13,10 +13,12 @@ public class Add {
     private String commandLine;
     private TodoList todoList;
     private PrintWriter out;
+    private TodoListRepository todoListRepository;
 
-    public Add(TodoList todoList, PrintWriter out) {
+    public Add(TodoList todoList, PrintWriter out, TodoListRepository todoListRepository) {
         this.todoList = todoList;
         this.out = out;
+        this.todoListRepository = todoListRepository;
     }
 
     public void add(String commandLine) {
@@ -24,7 +26,15 @@ public class Add {
         String[] subcommandRest = commandLine.split(" ", 2);
         String subcommand = subcommandRest[0];
         if (subcommand.equals("project")) {
-            addProject(ProjectName.of(subcommandRest[1]));
+//            addProject(ProjectName.of(subcommandRest[1]));
+
+            AddProjectUseCase addProjectUseCase = new AddProjectService(todoListRepository);
+            AddProjectInput input = new AddProjectInput();
+            input.toDoListId = todoList.getId().value();
+            input.projectName = subcommandRest[1];
+            addProjectUseCase.execute(input);
+
+
         } else if (subcommand.equals("task")) {
             String[] projectTask = subcommandRest[1].split(" ", 2);
             addTask(ProjectName.of(projectTask[0]), projectTask[1]);

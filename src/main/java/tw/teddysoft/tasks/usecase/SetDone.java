@@ -17,7 +17,7 @@ public class SetDone {
     }
 
     public void setDone(String idString, boolean done) {
-//        int id = Integer.parseInt(idString);
+//        int value = Integer.parseInt(idString);
         TaskId id = TaskId.of(idString);
         for (Project project : todoList.getProject()) {
             for (Task task : project.getTasks()) {
