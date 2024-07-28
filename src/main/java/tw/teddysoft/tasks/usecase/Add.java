@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Add {
-    private String commandLine;
     private TodoList todoList;
     private PrintWriter out;
     private TodoListRepository todoListRepository;
@@ -26,7 +25,6 @@ public class Add {
     }
 
     public void add(String commandLine) {
-        this.commandLine = commandLine;
         String[] subcommandRest = commandLine.split(" ", 2);
         String subcommand = subcommandRest[0];
         if (subcommand.equals("project")) {
