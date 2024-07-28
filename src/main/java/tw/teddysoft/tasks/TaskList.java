@@ -1,13 +1,12 @@
 package tw.teddysoft.tasks;
 
 import tw.teddysoft.tasks.entity.*;
+import tw.teddysoft.tasks.usecase.Execute;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 public final class TaskList implements Runnable {
     private static final String QUIT = "quit";
@@ -15,8 +14,6 @@ public final class TaskList implements Runnable {
     private final PrintWriter out;
     private TodoListId DEFAULT_TO_DO_LIST_ID = TodoListId.of(123);
     private final TodoList todoList = new TodoList(DEFAULT_TO_DO_LIST_ID);
-
-//    private long lastId = 0;
 
     public TaskList(BufferedReader reader, PrintWriter writer) {
         this.in = reader;
@@ -42,111 +39,8 @@ public final class TaskList implements Runnable {
             if (command.equals(QUIT)) {
                 break;
             }
-            execute(command);
+            new Execute(todoList, out).execute(command);
         }
     }
 
-    private void execute(String commandLine) {
-        String[] commandRest = commandLine.split(" ", 2);
-        String command = commandRest[0];
-        switch (command) {
-            case "show":
-                show();
-                break;
-            case "add":
-                add(commandRest[1]);
-                break;
-            case "check":
-                check(commandRest[1]);
-                break;
-            case "uncheck":
-                uncheck(commandRest[1]);
-                break;
-            case "help":
-                help();
-                break;
-            default:
-                error(command);
-                break;
-        }
-    }
-
-    private void show() {
-//        for (Map.Entry<ProjectName, List<Task>> project : tasks.entrySet()) {
-        for (Project project : todoList.getProject()) {
-            out.println(project.getName());
-            for (Task task : project.getTasks()) {
-                out.printf("    [%c] %s: %s%n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription());
-            }
-            out.println();
-        }
-    }
-
-    private void add(String commandLine) {
-        String[] subcommandRest = commandLine.split(" ", 2);
-        String subcommand = subcommandRest[0];
-        if (subcommand.equals("project")) {
-            addProject(ProjectName.of(subcommandRest[1]));
-        } else if (subcommand.equals("task")) {
-            String[] projectTask = subcommandRest[1].split(" ", 2);
-            addTask(ProjectName.of(projectTask[0]), projectTask[1]);
-        }
-    }
-
-    private void addProject(ProjectName projectName) {
-        todoList.addProject(new Project(projectName, new ArrayList<Task>()));
-    }
-
-    private void addTask(ProjectName projectName, String description) {
-        List<Task> projectTasks = todoList.getTasks(projectName);
-        if (projectTasks == null) {
-            out.printf("Could not find a project with the name \"%s\".", projectName);
-            out.println();
-            return;
-        }
-        projectTasks.add(new Task(todoList.nextId(), description, false));
-    }
-
-    private void check(String idString) {
-        setDone(idString, true);
-    }
-
-    private void uncheck(String idString) {
-        setDone(idString, false);
-    }
-
-    private void setDone(String idString, boolean done) {
-//        int id = Integer.parseInt(idString);
-        TaskId id = TaskId.of(idString);
-        for (Project project : todoList.getProject()) {
-            for (Task task : project.getTasks()) {
-                if (task.getId().equals(id)) {
-                    //task.setDone(done);
-                    todoList.setDone(task.getId(), done);
-                    return;
-                }
-            }
-        }
-        out.printf("Could not find a task with an ID of %s.", id);
-        out.println();
-    }
-
-    private void help() {
-        out.println("Commands:");
-        out.println("  show");
-        out.println("  add project <project name>");
-        out.println("  add task <project name> <task description>");
-        out.println("  check <task ID>");
-        out.println("  uncheck <task ID>");
-        out.println();
-    }
-
-    private void error(String command) {
-        out.printf("I don't know what the command \"%s\" is.", command);
-        out.println();
-    }
-
-//    private long nextId() {
-//        return ++lastId;
-//    }
 }
